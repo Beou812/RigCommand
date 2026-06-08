@@ -1,0 +1,3650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#d97706">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="RigCommand">
+<meta name="description" content="Owner/Operator Trucking Operations App">
+<title>RigCommand</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.svg">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+/* ══════════════════════════════════════════════════════
+   RIGCOMMAND — UPGRADED DESIGN SYSTEM
+   Research-backed: dark mode, micro-interactions, skeleton
+   loaders, toast system, KPI sparklines, thumb-zone nav,
+   large touch targets, empty states, scroll-aware topbar,
+   consistent color semantics, smooth transitions
+   ══════════════════════════════════════════════════════ */
+
+/* ── Reset & tokens ──────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  /* Brand */
+  --amber:#d97706;--amber-l:#fef3c7;--amber-d:#92400e;
+  /* Semantic color system — consistent throughout (green=good, amber=warn, red=bad) */
+  --green:#16a34a;--green-l:#dcfce7;--green-d:#14532d;
+  --red:#dc2626;--red-l:#fee2e2;--red-d:#7f1d1d;
+  --blue:#2563eb;--blue-l:#dbeafe;--blue-d:#1e3a8a;
+  --purple:#7c3aed;--purple-l:#ede9fe;--purple-d:#4c1d95;
+  /* Ink system */
+  --ink:#111827;--ink2:#374151;--ink3:#6b7280;--ink4:#9ca3af;
+  /* Surfaces */
+  --surface:#ffffff;--surface2:#f9f8f6;--surface3:#f0ede8;--surface4:#e8e4de;
+  /* UI */
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --radius:12px;--radius-sm:8px;--radius-lg:16px;
+  /* Shadows */
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  --shadow:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.05);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.12),0 4px 8px rgba(0,0,0,0.06);
+  /* Safe areas */
+  --safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom);
+  /* Transitions */
+  --t-fast:.12s ease;--t-base:.2s ease;--t-slow:.35s ease;
+  /* Typography */
+  --font-display:'Georgia',serif;
+  --font-ui:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+
+/* ── Dark mode ───────────────────────────────────────── */
+@media(prefers-color-scheme:dark){
+  :root{
+    --ink:#f3f0ec;--ink2:#d1cdc7;--ink3:#9ca3af;--ink4:#6b7280;
+    --surface:#181714;--surface2:#1f1e1a;--surface3:#272520;--surface4:#2e2c28;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+    --shadow-sm:0 1px 3px rgba(0,0,0,0.3);
+    --shadow:0 4px 12px rgba(0,0,0,0.3);
+    --shadow-lg:0 12px 32px rgba(0,0,0,0.4);
+    --amber-l:rgba(217,119,6,0.18);--amber-d:#fbbf24;
+    --green-l:rgba(22,163,74,0.15);--green-d:#4ade80;
+    --red-l:rgba(220,38,38,0.15);--red-d:#f87171;
+    --blue-l:rgba(37,99,235,0.15);--blue-d:#60a5fa;
+    --purple-l:rgba(124,58,237,0.15);--purple-d:#a78bfa;
+  }
+}
+
+/* ── Manual dark mode toggle ─────────────────────────── */
+[data-theme="dark"]{
+  --ink:#f3f0ec;--ink2:#d1cdc7;--ink3:#9ca3af;--ink4:#6b7280;
+  --surface:#181714;--surface2:#1f1e1a;--surface3:#272520;--surface4:#2e2c28;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.3);
+  --shadow:0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.4);
+  --amber-l:rgba(217,119,6,0.18);--amber-d:#fbbf24;
+  --green-l:rgba(22,163,74,0.15);--green-d:#4ade80;
+  --red-l:rgba(220,38,38,0.15);--red-d:#f87171;
+  --blue-l:rgba(37,99,235,0.15);--blue-d:#60a5fa;
+  --purple-l:rgba(124,58,237,0.15);--purple-d:#a78bfa;
+}
+[data-theme="light"]{
+  --ink:#111827;--ink2:#374151;--ink3:#6b7280;--ink4:#9ca3af;
+  --surface:#ffffff;--surface2:#f9f8f6;--surface3:#f0ede8;--surface4:#e8e4de;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.06);
+  --shadow:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.05);
+  --shadow-lg:0 12px 32px rgba(0,0,0,0.12),0 4px 8px rgba(0,0,0,0.06);
+  --amber-l:#fef3c7;--amber-d:#92400e;
+  --green-l:#dcfce7;--green-d:#14532d;
+  --red-l:#fee2e2;--red-d:#7f1d1d;
+  --blue-l:#dbeafe;--blue-d:#1e3a8a;
+  --purple-l:#ede9fe;--purple-d:#4c1d95;
+}
+
+/* ── Base ────────────────────────────────────────────── */
+html,body{height:100%;overflow:hidden;font-family:var(--font-ui);background:var(--surface2);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:15px}
+
+/* ── App shell ───────────────────────────────────────── */
+.app{display:flex;flex-direction:column;height:100%;height:100dvh}
+
+/* ── Topbar — scroll-aware (shrinks on scroll down) ──── */
+.topbar{
+  background:var(--surface);
+  border-bottom:2px solid var(--amber);
+  padding:10px 1rem;
+  padding-top:calc(10px + var(--safe-top));
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0;
+  transition:padding var(--t-base),box-shadow var(--t-base);
+  box-shadow:var(--shadow-sm);
+  position:relative;z-index:10;
+}
+.topbar.compact{padding-top:calc(6px + var(--safe-top));padding-bottom:6px;box-shadow:var(--shadow)}
+.logo{font-size:19px;font-weight:800;letter-spacing:-0.5px;font-family:var(--font-display)}
+.logo span{color:var(--amber)}
+.rig-badge{
+  font-size:11px;color:var(--ink3);padding:4px 10px;border-radius:20px;
+  background:var(--surface3);border:1px solid var(--border2);font-family:var(--font-ui);
+  transition:opacity var(--t-base);
+}
+.topbar.compact .rig-badge{opacity:0;pointer-events:none}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.kpi{font-size:12px;padding:4px 11px;border-radius:20px;background:var(--surface3);border:1px solid var(--border2);white-space:nowrap;font-weight:500}
+.kpi strong{color:var(--green);font-weight:700}
+
+/* ── Theme toggle button ─────────────────────────────── */
+.theme-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid var(--border2);
+  background:var(--surface3);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:16px;transition:background var(--t-fast),transform var(--t-fast);flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.theme-btn:hover{background:var(--amber-l);transform:scale(1.1)}
+.theme-btn:active{transform:scale(0.95)}
+
+/* ── Search bar ──────────────────────────────────────── */
+.global-search-wrap{
+  flex:1;min-width:0;max-width:300px;position:relative;
+  transition:max-width var(--t-base);
+}
+.global-search-wrap.expanded{max-width:100%}
+.global-search{
+  width:100%;padding:6px 10px 6px 32px;border:1px solid var(--border2);
+  border-radius:20px;background:var(--surface3);color:var(--ink);
+  font-size:13px;font-family:var(--font-ui);transition:border-color var(--t-fast),background var(--t-fast);
+  -webkit-appearance:none;outline:none;
+}
+.global-search:focus{border-color:var(--amber);background:var(--surface);box-shadow:0 0 0 3px rgba(217,119,6,0.12)}
+.global-search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none;opacity:0.5}
+
+/* ── Nav (drag-to-reorder) ───────────────────────────── */
+.nav-wrap{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  flex-shrink:0;overflow-x:auto;scrollbar-width:none;
+  user-select:none;-webkit-user-select:none;box-shadow:var(--shadow-sm);
+}
+.nav-wrap::-webkit-scrollbar{display:none}
+.nav-bar{display:flex;gap:0;padding:0 .5rem;min-width:max-content;position:relative}
+.nav-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:12px 14px; /* Generous touch targets — research: min 44px height */
+  cursor:grab;font-size:13px;font-weight:500;color:var(--ink3);
+  border:none;border-bottom:3px solid transparent;
+  background:none;font-family:var(--font-ui);white-space:nowrap;
+  transition:color var(--t-fast),background var(--t-fast),border-color var(--t-fast),opacity var(--t-fast);
+  touch-action:none;position:relative;min-height:44px; /* Accessibility: 44px min touch target */
+  -webkit-tap-highlight-color:transparent;
+}
+.nav-btn:hover{color:var(--ink);background:var(--surface3)}
+.nav-btn.active{color:var(--amber-d);border-bottom-color:var(--amber);font-weight:700;background:var(--amber-l)}
+.nav-btn.dragging{opacity:0.3;cursor:grabbing}
+.nav-btn.drag-over{background:var(--amber-l)}
+.nav-btn.drag-over::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--amber);border-radius:2px}
+.nav-ghost{position:fixed;pointer-events:none;z-index:9999;background:var(--surface);border:2px solid var(--amber);border-radius:var(--radius-sm);padding:8px 14px;font-size:13px;font-weight:700;color:var(--amber-d);box-shadow:var(--shadow-lg);white-space:nowrap;opacity:0.95;transform:rotate(2deg)}
+.nav-hint{font-size:11px;color:var(--ink3);padding:3px 10px 3px 8px;margin:0 .5rem;display:flex;align-items:center;gap:5px;opacity:1;transition:opacity 1s;white-space:nowrap}
+
+/* Notification dot on tabs */
+.nav-btn .notif{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;animation:notif-pulse 2s ease-in-out infinite}
+@keyframes notif-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.85)}}
+
+/* ── Main scroll ─────────────────────────────────────── */
+.main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.main-inner{padding:1.25rem;padding-bottom:calc(1.25rem + var(--safe-bottom));max-width:960px;margin:0 auto}
+.section{display:none;animation:fade-in var(--t-base)}
+.section.active{display:block}
+@keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Page headers ────────────────────────────────────── */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.25rem;gap:.75rem;flex-wrap:wrap}
+.page-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;font-family:var(--font-display);line-height:1.2}
+.page-sub{font-size:13px;color:var(--ink3);margin-top:2px}
+
+/* ── Grid ────────────────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+@media(max-width:640px){.g2,.g3,.g4{grid-template-columns:1fr}}
+@media(min-width:641px) and (max-width:820px){.g4{grid-template-columns:1fr 1fr}}
+
+/* ── Cards ───────────────────────────────────────────── */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.25rem;
+  box-shadow:var(--shadow-sm);
+  transition:box-shadow var(--t-base),border-color var(--t-base);
+}
+.card:hover{box-shadow:var(--shadow)}
+.card-title{font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:.75rem;font-weight:600;display:flex;align-items:center;gap:6px}
+
+/* ── KPI cards with sparkline + trend ───────────────── */
+/* Research: identical layout — label, value, trend, sparkline at same position on every card */
+.kpi-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.1rem 1.25rem;box-shadow:var(--shadow-sm);transition:box-shadow var(--t-base),transform var(--t-fast);
+  position:relative;overflow:hidden;cursor:default;
+}
+.kpi-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
+.kpi-card:active{transform:translateY(0)}
+.kpi-label{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--ink3);font-weight:600;margin-bottom:6px}
+.kpi-value{font-size:28px;font-weight:800;letter-spacing:-1.5px;line-height:1;font-family:var(--font-display)}
+.kpi-trend{display:flex;align-items:center;gap:4px;margin-top:5px;font-size:12px;font-weight:600}
+.kpi-trend.up{color:var(--green-d)}
+.kpi-trend.down{color:var(--red-d)}
+.kpi-trend.flat{color:var(--ink3)}
+.kpi-sub{font-size:12px;color:var(--ink3);margin-top:3px}
+/* Sparkline in bottom-right of KPI card */
+.kpi-spark{position:absolute;bottom:0;right:0;width:80px;height:40px;opacity:0.2}
+/* Colored left border per status */
+.kpi-card.good{border-left:3px solid var(--green)}
+.kpi-card.warn{border-left:3px solid var(--amber)}
+.kpi-card.bad{border-left:3px solid var(--red)}
+.kpi-card.info{border-left:3px solid var(--blue)}
+
+/* ── Metric values ───────────────────────────────────── */
+.metric-val{font-size:26px;font-weight:800;letter-spacing:-1px;font-family:var(--font-display)}
+.metric-sub{font-size:12px;color:var(--ink3);margin-top:2px}
+
+/* ── Badges ──────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
+.bg{background:var(--green-l);color:var(--green-d)}
+.ba{background:var(--amber-l);color:var(--amber-d)}
+.br{background:var(--red-l);color:var(--red-d)}
+.bb{background:var(--blue-l);color:var(--blue-d)}
+.bp2{background:var(--purple-l);color:var(--purple-d)}
+
+/* ── Buttons — research: min 44px touch target ───────── */
+.btn{
+  padding:10px 18px;border-radius:var(--radius-sm);border:1.5px solid transparent;
+  cursor:pointer;font-size:14px;font-weight:600;font-family:var(--font-ui);
+  transition:background var(--t-fast),transform var(--t-fast),box-shadow var(--t-fast);
+  -webkit-tap-highlight-color:transparent;min-height:44px;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+}
+.btn:active{transform:scale(0.97)}
+.bp{background:var(--amber);color:#fff;border-color:var(--amber);box-shadow:0 2px 6px rgba(217,119,6,0.3)}
+.bp:hover{background:var(--amber-d);box-shadow:0 4px 10px rgba(217,119,6,0.35)}
+.bo{background:transparent;border-color:var(--border2);color:var(--ink2)}
+.bo:hover{border-color:var(--amber);color:var(--amber);background:var(--amber-l)}
+.bsm{padding:6px 14px;font-size:12px;min-height:36px}
+.bdanger{background:var(--red);color:#fff;border-color:var(--red)}
+.bdanger:hover{background:var(--red-d)}
+
+/* ── Inputs — cleaner, larger for drivers ────────────── */
+.input{
+  width:100%;padding:10px 12px;border:1.5px solid var(--border2);border-radius:var(--radius-sm);
+  background:var(--surface);color:var(--ink);font-size:16px;font-family:var(--font-ui);
+  transition:border-color var(--t-fast),box-shadow var(--t-fast);-webkit-appearance:none;
+  min-height:44px;
+}
+.input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(217,119,6,0.12)}
+.input::placeholder{color:var(--ink4)}
+.lbl{font-size:12px;color:var(--ink3);margin-bottom:4px;display:block;font-weight:500}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+@media(max-width:400px){.frow{grid-template-columns:1fr}}
+
+/* Input validation states */
+.input.valid{border-color:var(--green)}
+.input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,0.1)}
+.field-error{font-size:12px;color:var(--red-d);margin-top:3px;display:none}
+.field-error.show{display:block}
+
+/* ── Tables ──────────────────────────────────────────── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{text-align:left;padding:8px 10px;color:var(--ink3);border-bottom:2px solid var(--border2);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;background:var(--surface2)}
+.tbl td{padding:11px 10px;border-bottom:1px solid var(--border);color:var(--ink);transition:background var(--t-fast)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr{cursor:pointer}
+.tbl tbody tr:hover td{background:var(--amber-l)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--radius);border:1px solid var(--border)}
+
+/* ── Skeleton loaders — research: users interpret no feedback as broken ── */
+@keyframes shimmer{0%{background-position:-400px 0}100%{background-position:400px 0}}
+.skeleton{
+  background:linear-gradient(90deg,var(--surface3) 25%,var(--surface4) 50%,var(--surface3) 75%);
+  background-size:800px 100%;animation:shimmer 1.5s infinite;
+  border-radius:6px;
+}
+.skel-text{height:14px;border-radius:4px;margin-bottom:6px}
+.skel-text.wide{width:80%}
+.skel-text.med{width:55%}
+.skel-text.short{width:35%}
+.skel-card{height:80px;border-radius:var(--radius);margin-bottom:.75rem}
+.skel-kpi{height:90px;border-radius:var(--radius)}
+.skel-chart{height:180px;border-radius:var(--radius)}
+
+/* ── Toast notifications ─────────────────────────────── */
+#toast-container{position:fixed;top:calc(1rem + var(--safe-top));right:1rem;z-index:99999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:320px;width:calc(100vw - 2rem)}
+.toast{
+  background:var(--surface);border:1px solid var(--border2);border-radius:var(--radius);
+  padding:12px 14px;box-shadow:var(--shadow-lg);
+  display:flex;align-items:flex-start;gap:10px;font-size:13px;
+  pointer-events:all;cursor:pointer;
+  transform:translateX(120%);opacity:0;
+  transition:transform .3s cubic-bezier(0.34,1.56,0.64,1),opacity .25s ease;
+}
+.toast.show{transform:translateX(0);opacity:1}
+.toast.hide{transform:translateX(120%);opacity:0;transition:transform .25s ease,opacity .2s ease}
+.toast-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.toast-body{flex:1;min-width:0}
+.toast-title{font-weight:700;color:var(--ink);margin-bottom:2px}
+.toast-msg{color:var(--ink3);line-height:1.4;font-size:12px}
+.toast-close{font-size:16px;color:var(--ink4);flex-shrink:0;line-height:1;padding:0 2px}
+.toast.success{border-left:3px solid var(--green)}
+.toast.error{border-left:3px solid var(--red)}
+.toast.warning{border-left:3px solid var(--amber)}
+.toast.info{border-left:3px solid var(--blue)}
+/* Progress bar on toast */
+.toast-progress{height:2px;background:var(--amber);border-radius:0 0 var(--radius) var(--radius);position:absolute;bottom:0;left:0;width:100%;transform-origin:left;animation:toast-drain linear forwards}
+@keyframes toast-drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+
+/* ── Empty states ────────────────────────────────────── */
+/* Research: well-designed empty states feel like onboarding, not dead ends */
+.empty-state{
+  text-align:center;padding:3rem 1.5rem;color:var(--ink3);
+  display:flex;flex-direction:column;align-items:center;gap:.75rem;
+}
+.empty-state-icon{font-size:48px;opacity:0.5;margin-bottom:.25rem}
+.empty-state-title{font-size:16px;font-weight:700;color:var(--ink2)}
+.empty-state-sub{font-size:13px;line-height:1.6;max-width:280px}
+.empty-state .btn{margin-top:.5rem}
+
+/* ── Progress bars ───────────────────────────────────── */
+.prog-wrap{height:8px;border-radius:4px;background:var(--surface3);overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .6s cubic-bezier(0.4,0,0.2,1)}
+.prog-fill.green{background:var(--green)}
+.prog-fill.amber{background:var(--amber)}
+.prog-fill.red{background:var(--red)}
+.prog-fill.stripe{background:repeating-linear-gradient(45deg,var(--amber),var(--amber) 6px,var(--amber-d) 6px,var(--amber-d) 12px)}
+
+/* ── Load cards ──────────────────────────────────────── */
+.load-card{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:1rem 1.1rem;margin-bottom:.75rem;display:flex;justify-content:space-between;
+  align-items:flex-start;gap:.75rem;cursor:pointer;
+  transition:border-color var(--t-fast),box-shadow var(--t-fast),transform var(--t-fast);
+  box-shadow:var(--shadow-sm);
+}
+.load-card:hover{border-color:var(--amber);box-shadow:var(--shadow);transform:translateY(-1px)}
+.load-card:active{transform:translateY(0)}
+.rank-dot{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;font-size:11px;font-weight:800;background:var(--amber);color:#fff;margin-right:7px;flex-shrink:0}
+.stars{color:var(--amber);font-size:12px;letter-spacing:1px}
+
+/* ── Section sub-tabs ────────────────────────────────── */
+.stabs{display:flex;gap:3px;margin-bottom:1.25rem;background:var(--surface3);padding:3px;border-radius:var(--radius-sm);width:fit-content}
+.stab{padding:6px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;color:var(--ink3);transition:all var(--t-fast);min-height:32px;display:flex;align-items:center}
+.stab.active{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:var(--shadow-sm)}
+
+/* ── Install banner ──────────────────────────────────── */
+#install-banner{display:none;align-items:center;gap:10px;background:var(--amber);color:#fff;padding:10px 1rem;font-size:13px;cursor:pointer}
+#install-banner button{background:rgba(255,255,255,.25);border:none;color:#fff;padding:6px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;min-height:32px}
+
+/* ── Alert boxes ─────────────────────────────────────── */
+.alert-box{background:var(--amber-l);border:1.5px solid var(--amber);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--amber-d);display:flex;align-items:center;gap:8px;margin-bottom:1rem}
+.alert-box.danger{background:var(--red-l);border-color:var(--red);color:var(--red-d)}
+.alert-box.success{background:var(--green-l);border-color:var(--green);color:var(--green-d)}
+
+/* ── Invoice ─────────────────────────────────────────── */
+.inv-box{border:1.5px solid var(--border2);border-radius:var(--radius);padding:1.25rem;background:var(--surface);box-shadow:var(--shadow-sm)}
+.inv-line{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+.inv-total{display:flex;justify-content:space-between;padding:10px 0;font-size:16px;font-weight:800;color:var(--green)}
+
+/* ── Misc utility ────────────────────────────────────── */
+.lane-bar{height:8px;border-radius:4px;background:var(--surface3);margin-top:6px;overflow:hidden}
+.lane-fill{height:100%;border-radius:4px;background:var(--amber);transition:width .7s cubic-bezier(0.4,0,0.2,1)}
+.exp-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.exp-lbl{font-size:12px;width:90px;color:var(--ink2);flex-shrink:0;font-weight:500}
+.exp-track{flex:1;height:10px;background:var(--surface3);border-radius:5px;overflow:hidden}
+.exp-fill{height:100%;border-radius:5px;transition:width .6s ease}
+.exp-amt{font-size:12px;font-weight:700;width:58px;text-align:right;flex-shrink:0}
+.fuel-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.fuel-row:last-child{border-bottom:none}
+.fuel-ico{width:36px;height:36px;border-radius:var(--radius-sm);background:var(--amber-l);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.maint-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.maint-row:last-child{border-bottom:none}
+.msg-bubble{padding:10px 14px;border-radius:14px;margin-bottom:8px;max-width:84%;font-size:13px;line-height:1.55}
+.msg-in{background:var(--surface3);border-bottom-left-radius:4px;margin-right:auto}
+.msg-out{background:var(--amber);color:#fff;border-bottom-right-radius:4px;margin-left:auto}
+.msg-meta{font-size:11px;color:var(--ink3);margin-bottom:3px}
+.msg-meta-out{font-size:11px;color:rgba(255,255,255,.65);margin-bottom:3px;text-align:right}
+.chat-scroll{height:260px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-right:4px}
+@media(max-width:640px){.chat-scroll{height:200px}}
+.action-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);margin-bottom:8px;transition:filter var(--t-fast)}
+.action-item:hover{filter:brightness(0.96)}
+
+/* ── Profitability ───────────────────────────────────── */
+.rb-period-btn{padding:7px 16px;border-radius:6px;border:1.5px solid var(--border2);background:transparent;color:var(--ink3);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-ui);transition:all var(--t-fast);min-height:36px}
+.rb-period-btn.active{background:var(--amber);color:#fff;border-color:var(--amber);box-shadow:0 2px 6px rgba(217,119,6,0.3)}
+.rb-load-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background var(--t-fast)}
+.rb-load-row:last-child{border-bottom:none}
+.rb-load-row:hover{background:var(--surface3);margin:0 -8px;padding:11px 8px;border-radius:var(--radius-sm)}
+.rb-score{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.rb-donut-wrap{position:relative;width:130px;height:130px;flex-shrink:0}
+.rb-donut-wrap canvas{position:absolute;top:0;left:0}
+.rb-donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
+.profit-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:13px;font-weight:700}
+
+/* ── AI Eval ─────────────────────────────────────────── */
+.ai-score-ring{width:90px;height:90px;position:relative;flex-shrink:0}
+.ai-score-ring svg{transform:rotate(-90deg)}
+.ai-score-val{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;font-weight:800;text-align:center;line-height:1}
+.ai-factor{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--border)}
+.ai-factor:last-child{border-bottom:none}
+.ai-factor-bar{flex:1;height:9px;border-radius:4px;background:var(--surface3);overflow:hidden}
+.ai-factor-fill{height:100%;border-radius:4px;transition:width .7s cubic-bezier(0.4,0,0.2,1)}
+.ai-thinking{display:flex;gap:5px;align-items:center;padding:8px 0}
+.ai-dot{width:9px;height:9px;border-radius:50%;background:var(--amber);animation:pulse 1.2s ease-in-out infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+.eval-card{border:2px solid var(--border);border-radius:var(--radius);padding:1.25rem;margin-bottom:.75rem;transition:border-color var(--t-base);box-shadow:var(--shadow-sm)}
+.eval-card.good{border-color:var(--green);background:var(--green-l)}
+.eval-card.warn{border-color:var(--amber);background:var(--amber-l)}
+.eval-card.bad{border-color:var(--red);background:var(--red-l)}
+
+/* ── Fuel Opt ────────────────────────────────────────── */
+.station-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:1rem;margin-bottom:.75rem;display:flex;align-items:center;gap:14px;transition:border-color var(--t-fast),box-shadow var(--t-fast)}
+.station-card:hover{border-color:var(--amber);box-shadow:var(--shadow)}
+.station-card.best{border-color:var(--green);background:var(--green-l)}
+.station-num{width:30px;height:30px;border-radius:50%;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.station-num.best{background:var(--green);color:#fff}
+.fuel-gauge{height:18px;background:var(--surface3);border-radius:9px;overflow:hidden;position:relative}
+.fuel-gauge-fill{height:100%;border-radius:9px;transition:width .8s cubic-bezier(0.4,0,0.2,1);background:linear-gradient(90deg,var(--red) 0%,var(--amber) 50%,var(--green) 100%)}
+
+/* ── Scroll-to-top FAB ───────────────────────────────── */
+.fab-top{
+  position:fixed;bottom:calc(1.5rem + var(--safe-bottom));right:1.25rem;
+  width:46px;height:46px;border-radius:50%;
+  background:var(--amber);color:#fff;border:none;cursor:pointer;
+  font-size:20px;box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity var(--t-base),transform var(--t-base);
+  opacity:0;pointer-events:none;z-index:100;
+  -webkit-tap-highlight-color:transparent;
+}
+.fab-top.visible{opacity:1;pointer-events:all}
+.fab-top:hover{transform:scale(1.08);background:var(--amber-d)}
+.fab-top:active{transform:scale(0.95)}
+
+/* ── Section title divider ───────────────────────────── */
+.section-divider{display:flex;align-items:center;gap:.75rem;margin:1.25rem 0 .75rem;color:var(--ink3);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── Tooltip ─────────────────────────────────────────── */
+[data-tip]{position:relative}
+[data-tip]:hover::after{
+  content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
+  background:var(--ink);color:var(--surface);font-size:11px;padding:5px 9px;border-radius:6px;
+  white-space:nowrap;z-index:1000;pointer-events:none;font-family:var(--font-ui);font-weight:500;
+  box-shadow:var(--shadow);
+}
+[data-tip]:hover::before{
+  content:'';position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);
+  border:4px solid transparent;border-top-color:var(--ink);z-index:1001;pointer-events:none;
+}
+
+/* ── Onboarding pulse ────────────────────────────────── */
+.pulse-ring{animation:ring-pulse 2s cubic-bezier(0,0,.2,1) infinite}
+@keyframes ring-pulse{0%{box-shadow:0 0 0 0 rgba(217,119,6,0.4)}70%{box-shadow:0 0 0 10px rgba(217,119,6,0)}100%{box-shadow:0 0 0 0 rgba(217,119,6,0)}}
+
+/* ── Notification dot ────────────────────────────────── */
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;flex-shrink:0}
+
+/* ── Color-coded stat rows ───────────────────────────── */
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.stat-row:last-child{border-bottom:none}
+.stat-val{font-weight:700}
+
+/* ── Responsive topbar ───────────────────────────────── */
+@media(max-width:480px){
+  .global-search-wrap{display:none}
+  .rig-badge{display:none}
+}
+
+/* ── Bottom navigation bar (mobile only, thumb-zone) ──── */
+.bottom-nav{
+  display:none; /* shown via media query below */
+  position:fixed;
+  bottom:0;left:0;right:0;
+  height:calc(58px + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  background:var(--surface);
+  border-top:1px solid var(--border2);
+  box-shadow:0 -4px 16px rgba(0,0,0,0.1);
+  z-index:200;
+  flex-direction:row;
+  align-items:stretch;
+  justify-content:space-around;
+}
+.bn-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:3px;padding:6px 4px;cursor:pointer;
+  background:none;border:none;font-family:var(--font-ui);
+  color:var(--ink3);font-size:10px;font-weight:500;
+  transition:color var(--t-fast),background var(--t-fast);
+  -webkit-tap-highlight-color:transparent;
+  position:relative;min-width:0;
+}
+.bn-btn:active{background:var(--surface3)}
+.bn-btn.active{color:var(--amber-d)}
+.bn-btn.active .bn-icon{
+  background:var(--amber-l);
+  transform:scale(1.05);
+}
+.bn-icon{
+  width:36px;height:30px;border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:19px;transition:background var(--t-fast),transform var(--t-fast);
+}
+.bn-label{font-size:10px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52px}
+.bn-notif{
+  position:absolute;top:4px;right:calc(50% - 22px);
+  width:7px;height:7px;border-radius:50%;
+  background:var(--red);border:1.5px solid var(--surface);
+  display:none;
+}
+.bn-notif.show{display:block}
+
+/* More menu overlay */
+.more-menu{
+  display:none;position:fixed;bottom:calc(58px + var(--safe-bottom));left:0;right:0;
+  background:var(--surface);border-top:1px solid var(--border2);
+  box-shadow:0 -8px 24px rgba(0,0,0,0.15);z-index:199;
+  padding:.75rem;
+  grid-template-columns:repeat(3,1fr);gap:.5rem;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+}
+.more-menu.open{display:grid}
+.more-item{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;padding:12px 6px;border-radius:var(--radius-sm);
+  cursor:pointer;background:var(--surface3);
+  font-size:11px;font-weight:600;color:var(--ink2);
+  transition:background var(--t-fast);
+  -webkit-tap-highlight-color:transparent;
+  min-height:64px;
+}
+.more-item:active{background:var(--amber-l);color:var(--amber-d)}
+.more-item .mi-icon{font-size:22px;line-height:1}
+.more-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:198;
+}
+.more-overlay.open{display:block}
+
+@media(max-width:640px){
+  /* Show bottom nav, hide top nav bar */
+  .bottom-nav{display:flex}
+  .nav-wrap{display:none}
+  /* Push main content up above the bottom nav */
+  .main{padding-bottom:calc(58px + var(--safe-bottom))}
+  /* Reduce main-inner padding on mobile */
+  .main-inner{padding:.85rem .85rem calc(.85rem + 58px + var(--safe-bottom))}
+  /* Compact page headers on mobile */
+  .page-title{font-size:18px}
+  .page-sub{font-size:12px;margin-bottom:1rem}
+  /* Move FAB above bottom nav */
+  .fab-top{bottom:calc(58px + var(--safe-bottom) + 1rem)}
+  /* Toast full width on mobile */
+  #toast-container{left:.75rem;right:.75rem;max-width:100%}
+  /* Tighter cards on mobile */
+  .card{padding:1rem}
+  /* Larger load card tap area */
+  .load-card{padding:1rem}
+  /* Bottom nav covers tables — ensure scroll wrapper accounts for it */
+  .tbl-wrap{margin-bottom:0}
+}
+
+/* ── Accounting tab ──────────────────────────────────── */
+.acct-source-card{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:6px;padding:1rem .75rem;background:var(--surface2);border:1.5px solid var(--border2);
+  border-radius:var(--radius-sm);cursor:pointer;text-align:center;
+  transition:border-color var(--t-fast),background var(--t-fast),transform var(--t-fast);
+  min-height:90px;
+}
+.acct-source-card:hover{border-color:var(--amber);background:var(--amber-l);transform:translateY(-1px)}
+.acct-source-card:active{transform:translateY(0)}
+.acct-source-logo{font-size:26px;line-height:1}
+.acct-source-lbl{font-size:13px;font-weight:700;color:var(--ink)}
+.acct-source-sub{font-size:11px;color:var(--ink3)}
+.acct-tax-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.acct-tax-row:last-child{border-bottom:none}
+.acct-tax-lbl{color:var(--ink2)}
+.acct-tax-val{font-weight:700}
+.acct-ifta-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.acct-ifta-row:last-child{border-bottom:none}
+.txn-income{color:var(--green-d);font-weight:700}
+.txn-expense{color:var(--red-d);font-weight:700}
+
+/* ── Focus visible for accessibility ─────────────────── */
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+button:focus:not(:focus-visible){outline:none}
+</style>
+</head>
+<body>
+<div id="install-banner" onclick="installApp()">
+  <span>📱 Add RigCommand to your home screen</span>
+  <button onclick="event.stopPropagation();installApp()">Install</button>
+  <button onclick="event.stopPropagation();document.getElementById('install-banner').style.display='none'" style="background:rgba(255,255,255,.15)">✕</button>
+</div>
+
+<div class="app">
+<div class="topbar" id="topbar">
+    <div class="logo">Rig<span>Command</span></div>
+    <div class="rig-badge">TX-4821 · Cascadia · 89,320 mi</div>
+    <div class="global-search-wrap">
+      <span class="global-search-icon">🔍</span>
+      <input class="global-search" id="global-search" placeholder="Search loads, expenses, lanes…" oninput="globalSearch(this.value)" onfocus="this.closest('.global-search-wrap').classList.add('expanded')" onblur="this.closest('.global-search-wrap').classList.remove('expanded')">
+    </div>
+    <div class="topbar-actions">
+      <div class="kpi">Week: <strong id="hdr-revenue">$14,230</strong></div>
+      <div class="kpi">RPM: <strong id="hdr-rpm">$2.95</strong></div>
+      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" data-tip="Toggle dark/light mode" aria-label="Toggle theme">🌙</button>
+    </div>
+  </div>
+  <div class="nav-wrap" id="nav-wrap">
+    <div class="nav-bar" id="nav-bar">
+      <!-- Tabs rendered by JS — supports drag-to-reorder -->
+    </div>
+  </div>
+
+  <div class="main"><div class="main-inner">
+
+  <!-- ══════════════════════════════════════════════════
+       LOADS
+  ══════════════════════════════════════════════════ -->
+  <div class="section active" id="sec-loads">
+    <div class="page-title">Find &amp; Rank Loads</div>
+    <div class="page-sub">AI-ranked by net profit after fuel, time &amp; deadhead</div>
+
+    <!-- Search bar -->
+    <div style="display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap;align-items:flex-end">
+      <div style="flex:1;min-width:120px"><span class="lbl">From</span><input class="input" id="ld-from" value="Dallas, TX"></div>
+      <div style="flex:1;min-width:120px"><span class="lbl">To (optional)</span><input class="input" id="ld-to" placeholder="Any destination"></div>
+      <div style="flex:0 0 110px">
+        <span class="lbl">Load Type</span>
+        <select class="input" id="ld-type">
+          <option value="">All Types</option>
+          <option>Dry Van</option><option>Reefer</option><option>Flatbed</option><option>Step Deck</option>
+        </select>
+      </div>
+      <div style="flex:0 0 110px">
+        <span class="lbl">Min RPM ($)</span>
+        <input class="input" type="number" id="ld-minrpm" placeholder="e.g. 2.50" step="0.10">
+      </div>
+      <button class="btn bp" onclick="searchLoads()">🔍 Search</button>
+    </div>
+
+    <!-- Source note -->
+    <div style="font-size:12px;color:var(--ink3);background:var(--amber-l);border:1px solid var(--amber);border-radius:7px;padding:7px 12px;margin-bottom:1rem;display:flex;align-items:center;gap:8px">
+      <span>ℹ️</span>
+      <span>Results are <strong>AI-simulated</strong> based on your origin &amp; typical market rates for that corridor. Connect a <strong>DAT</strong> or <strong>Truckstop</strong> API key in Settings for live loads.</span>
+    </div>
+
+    <!-- Results -->
+    <div id="loads-list"></div>
+
+    <!-- Manual paste form toggle -->
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem">
+        <div>
+          <div style="font-weight:700;font-size:14px">📋 Paste a Load Offer</div>
+          <div style="font-size:12px;color:var(--ink3)">Got a load from a broker email or text? Enter it manually here.</div>
+        </div>
+        <button class="btn bo bsm" onclick="togglePasteForm()">+ Add Manually</button>
+      </div>
+      <div id="paste-form" style="display:none">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem">
+          <div class="frow">
+            <div><span class="lbl">Origin</span><input class="input" id="pf-orig" placeholder="Dallas, TX"></div>
+            <div><span class="lbl">Destination</span><input class="input" id="pf-dest" placeholder="Chicago, IL"></div>
+          </div>
+          <div class="frow">
+            <div><span class="lbl">Miles</span><input class="input" type="number" id="pf-miles" placeholder="920"></div>
+            <div><span class="lbl">Offered Rate ($)</span><input class="input" type="number" id="pf-rate" placeholder="2622"></div>
+          </div>
+          <div class="frow">
+            <div><span class="lbl">Weight (lbs)</span><input class="input" id="pf-weight" placeholder="42,000"></div>
+            <div><span class="lbl">Load Type</span>
+              <select class="input" id="pf-type"><option>Dry Van</option><option>Reefer</option><option>Flatbed</option><option>Step Deck</option><option>Tanker</option></select>
+            </div>
+          </div>
+          <div class="frow">
+            <div><span class="lbl">Pickup Date/Time</span><input class="input" id="pf-pickup" placeholder="Today 14:00"></div>
+            <div><span class="lbl">Broker Name</span><input class="input" id="pf-broker" placeholder="Coyote Logistics"></div>
+          </div>
+          <div style="margin-bottom:.75rem">
+            <span class="lbl">Special Requirements</span>
+            <input class="input" id="pf-notes" placeholder="No touch, drop & hook, hazmat, team...">
+          </div>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+            <button class="btn bp bsm" onclick="addManualLoad()">➕ Add to Load Board</button>
+            <button class="btn bo bsm" onclick="document.getElementById('paste-form').style.display='none'">Cancel</button>
+          </div>
+          <div id="pf-confirm" style="margin-top:6px;font-size:12px;color:var(--green)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booked loads panel -->
+    <div id="booked-panel" style="margin-top:1.25rem;display:none">
+      <div style="padding-top:1.25rem;border-top:1px solid var(--border)">
+        <div style="font-weight:700;font-size:14px;margin-bottom:.75rem">✅ Booked Loads This Week</div>
+        <div id="booked-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       AI LOAD EVALUATION
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-aieval">
+    <div class="page-title">AI Load Evaluator</div>
+    <div class="page-sub">Paste a load offer — AI scores profitability, risk &amp; fit for your truck</div>
+
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">Enter Load Details</div>
+        <div class="frow">
+          <div><span class="lbl">Origin</span><input class="input" id="ev-orig" value="Dallas, TX"></div>
+          <div><span class="lbl">Destination</span><input class="input" id="ev-dest" value="Chicago, IL"></div>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">Miles</span><input class="input" type="number" id="ev-miles" value="920"></div>
+          <div><span class="lbl">Offered Rate ($)</span><input class="input" type="number" id="ev-rate" value="2350"></div>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">Weight (lbs)</span><input class="input" type="number" id="ev-weight" value="42000"></div>
+          <div><span class="lbl">Commodity</span><input class="input" id="ev-commodity" value="Dry Goods"></div>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">Pickup Date</span><input class="input" type="date" id="ev-date"></div>
+          <div><span class="lbl">Load Type</span>
+            <select class="input" id="ev-type">
+              <option>Dry Van</option><option>Reefer</option><option>Flatbed</option><option>Step Deck</option><option>Tanker</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <span class="lbl">Special Requirements / Notes</span>
+          <input class="input" id="ev-notes" placeholder="Team driver needed, hazmat, drop & hook...">
+        </div>
+        <button class="btn bp" onclick="runAIEval()" id="ev-btn">🤖 Evaluate This Load</button>
+      </div>
+
+      <div id="ev-result-panel">
+        <div class="card" style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--ink3);min-height:280px">
+          <div style="font-size:40px">🤖</div>
+          <div style="font-size:14px;text-align:center">Fill in load details and click<br><strong style="color:var(--ink)">Evaluate This Load</strong></div>
+          <div style="font-size:12px;text-align:center;max-width:220px">AI will score profitability, flag risks, and compare to market rates</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="ev-factors-panel" style="display:none">
+      <div class="card" style="margin-bottom:1rem">
+        <div class="card-title">Factor Breakdown</div>
+        <div id="ev-factors"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recent Evaluations</div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Lane</th><th>Rate</th><th>Score</th><th>RPM</th><th>Verdict</th><th>Date</th></tr></thead>
+        <tbody id="ev-history"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       FUEL OPTIMIZATION
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-fuelopt">
+    <div class="page-title">Fuel Optimization</div>
+    <div class="page-sub">Real-time price comparison, fuel stop planning &amp; cost projections</div>
+
+    <div class="g4" style="margin-bottom:1rem">
+      <div class="card"><div class="card-title">Avg Price Paid</div><div class="metric-val" style="color:var(--amber)">$3.84</div><div class="metric-sub">Last 30 days/gal</div></div>
+      <div class="card"><div class="card-title">Monthly Fuel Cost</div><div class="metric-val">$4,810</div><div class="metric-sub">Est. this month</div></div>
+      <div class="card"><div class="card-title">Potential Savings</div><div class="metric-val" style="color:var(--green)">$312</div><div class="metric-sub">Optimizing stops</div></div>
+      <div class="card"><div class="card-title">% of Revenue</div><div class="metric-val" style="color:var(--red)">33.8%</div><div class="metric-sub">Fuel cost ratio</div></div>
+    </div>
+
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">Trip Fuel Planner</div>
+        <div class="frow">
+          <div><span class="lbl">Origin</span><input class="input" id="fo-orig" value="Dallas, TX"></div>
+          <div><span class="lbl">Destination</span><input class="input" id="fo-dest" value="Chicago, IL"></div>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">Tank Size (gal)</span><input class="input" type="number" id="fo-tank" value="150"></div>
+          <div><span class="lbl">Current Fuel (%)</span><input class="input" type="number" id="fo-level" value="65"></div>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">MPG</span><input class="input" type="number" id="fo-mpg" value="6.8" step="0.1"></div>
+          <div><span class="lbl">Preferred Network</span>
+            <select class="input" id="fo-network">
+              <option>All Chains</option><option>Pilot / Flying J</option><option>Love's</option><option>TA / Petro</option><option>Speedway</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn bp" onclick="planFuel()">Plan Fuel Stops</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Current Fuel Level</div>
+        <div style="margin-bottom:1rem">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink3);margin-bottom:6px">
+            <span>Empty</span><span id="fo-level-label">65% · 97.5 gal</span><span>Full</span>
+          </div>
+          <div class="fuel-gauge" id="fo-gauge-wrap">
+            <div class="fuel-gauge-fill" id="fo-gauge" style="width:65%"></div>
+          </div>
+        </div>
+        <div id="fo-gauge-info" style="font-size:13px;color:var(--ink2)">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span>Current fuel</span><span style="font-weight:600">97.5 gal</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span>Range available</span><span style="font-weight:600">663 miles</span></div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0"><span>Recommended fill-up by</span><span style="font-weight:600;color:var(--amber)">Mile 450</span></div>
+        </div>
+        <input type="range" min="0" max="100" value="65" id="fo-level-slider" oninput="updateGauge(this.value)" style="width:100%;margin-top:1rem;accent-color:var(--amber)">
+      </div>
+    </div>
+
+    <div id="fo-stops-section" style="display:none;margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">Optimized Fuel Stop Plan</div>
+        <div id="fo-stops-list"></div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">Price Trends — Last 8 Weeks</div>
+        <canvas id="fuelTrendChart" height="160"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">Nearby Stations — Dallas, TX</div>
+        <div id="fo-nearby"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">Fuel Purchase Log</div>
+      <div style="display:flex;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:100px"><span class="lbl">Location</span><input class="input" id="fl-loc" placeholder="Pilot, I-30 Dallas"></div>
+        <div style="flex:0 0 90px"><span class="lbl">Gallons</span><input class="input" type="number" id="fl-gal" placeholder="80"></div>
+        <div style="flex:0 0 90px"><span class="lbl">Price/gal</span><input class="input" type="number" id="fl-price" placeholder="3.79" step="0.01"></div>
+        <div style="flex:0 0 100px"><span class="lbl">Date</span><input class="input" type="date" id="fl-date"></div>
+        <button class="btn bp bsm" onclick="logFuel()">Log Fill-up</button>
+      </div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Location</th><th>Gallons</th><th>Price/gal</th><th>Total</th><th>Date</th></tr></thead>
+        <tbody id="fl-tbody"></tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PROFITABILITY (RIGBOOK STYLE)
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-profitability">
+    <div class="page-title">Profitability Tracker</div>
+    <div class="page-sub">RigBook-style load ledger — revenue, costs &amp; net per load</div>
+
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap">
+      <div style="display:flex;gap:4px">
+        <button class="rb-period-btn active" onclick="rbPeriod('week',this)">Week</button>
+        <button class="rb-period-btn" onclick="rbPeriod('month',this)">Month</button>
+        <button class="rb-period-btn" onclick="rbPeriod('quarter',this)">Quarter</button>
+        <button class="rb-period-btn" onclick="rbPeriod('ytd',this)">YTD</button>
+      </div>
+      <button class="btn bp bsm" style="margin-left:auto" onclick="showAddLoad()">+ Log Load</button>
+    </div>
+
+    <!-- KPI strip -->
+    <div class="g4" style="margin-bottom:1rem">
+      <div class="card" id="rb-kpi-revenue"><div class="card-title">Gross Revenue</div><div class="metric-val" style="color:var(--green)" id="rb-revenue">$14,230</div><div class="metric-sub" id="rb-revenue-sub">5 loads this week</div></div>
+      <div class="card"><div class="card-title">Total Expenses</div><div class="metric-val" style="color:var(--red)" id="rb-expenses">$9,418</div><div class="metric-sub">Fuel, tolls, misc</div></div>
+      <div class="card"><div class="card-title">Net Profit</div><div class="metric-val" id="rb-net" style="color:var(--green)">$4,812</div><div class="metric-sub" id="rb-margin">Margin: 33.8%</div></div>
+      <div class="card"><div class="card-title">Avg RPM</div><div class="metric-val" style="color:var(--amber)" id="rb-rpm">$2.95</div><div class="metric-sub">Revenue per mile</div></div>
+    </div>
+
+    <div class="g2" style="margin-bottom:1rem">
+      <!-- Donut breakdown -->
+      <div class="card">
+        <div class="card-title">Revenue vs Cost Breakdown</div>
+        <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+          <div class="rb-donut-wrap" style="width:140px;height:140px;margin:0 auto">
+            <canvas id="rbDonutChart" width="140" height="140"></canvas>
+            <div class="rb-donut-center">
+              <div style="font-size:18px;font-weight:700;color:var(--green)" id="rb-donut-label">33.8%</div>
+              <div style="font-size:10px;color:var(--ink3)">margin</div>
+            </div>
+          </div>
+          <div style="flex:1;min-width:140px">
+            <div id="rb-legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Revenue chart -->
+      <div class="card">
+        <div class="card-title">Daily Net Profit</div>
+        <canvas id="rbProfitChart" height="160"></canvas>
+      </div>
+    </div>
+
+    <!-- Per-load table -->
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">Load Ledger</div>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>#</th><th>Lane</th><th>Miles</th><th>Gross</th><th>Fuel</th><th>Other</th><th>Net</th><th>RPM</th><th>Score</th></tr></thead>
+        <tbody id="rb-load-tbody"></tbody>
+      </table></div>
+    </div>
+
+    <!-- Add load form -->
+    <div id="rb-add-form" style="display:none" class="card">
+      <div class="card-title">Log New Load</div>
+      <div class="frow">
+        <div><span class="lbl">Origin</span><input class="input" id="rb-orig" placeholder="Dallas, TX"></div>
+        <div><span class="lbl">Destination</span><input class="input" id="rb-dest" placeholder="Chicago, IL"></div>
+      </div>
+      <div class="frow">
+        <div><span class="lbl">Miles</span><input class="input" type="number" id="rb-miles" placeholder="920"></div>
+        <div><span class="lbl">Gross Revenue ($)</span><input class="input" type="number" id="rb-gross" placeholder="2622"></div>
+      </div>
+      <div class="frow">
+        <div><span class="lbl">Fuel Cost ($)</span><input class="input" type="number" id="rb-fuel" placeholder="540"></div>
+        <div><span class="lbl">Other Expenses ($)</span><input class="input" type="number" id="rb-other" placeholder="120"></div>
+      </div>
+      <div class="frow">
+        <div><span class="lbl">Date</span><input class="input" type="date" id="rb-date"></div>
+        <div><span class="lbl">Broker</span><input class="input" id="rb-broker" placeholder="Coyote Logistics"></div>
+      </div>
+      <div style="display:flex;gap:.75rem">
+        <button class="btn bp bsm" onclick="saveRbLoad()">Save Load</button>
+        <button class="btn bo bsm" onclick="document.getElementById('rb-add-form').style.display='none'">Cancel</button>
+      </div>
+      <div id="rb-save-confirm" style="margin-top:6px;font-size:12px;color:var(--green)"></div>
+    </div>
+
+    <!-- Best/worst lanes -->
+    <div class="g2">
+      <div class="card">
+        <div class="card-title">🏆 Best Performing Lanes</div>
+        <div id="rb-best-lanes"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚠️ Underperforming Lanes</div>
+        <div id="rb-worst-lanes"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       LANES
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-lanes">
+    <div class="page-title">Lane Intelligence</div>
+    <div class="page-sub">Profitability predictions &amp; seasonal rate trends</div>
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">Top Earning Lanes</div>
+        <div id="top-lanes"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Rate Trend — Dallas → Chicago</div>
+        <canvas id="laneChart" height="155"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Predict a Lane</div>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:110px"><span class="lbl">Origin</span><input class="input" id="p-orig" value="Houston, TX"></div>
+        <div style="flex:1;min-width:110px"><span class="lbl">Destination</span><input class="input" id="p-dest" value="Atlanta, GA"></div>
+        <div style="flex:0 0 120px"><span class="lbl">Month</span>
+          <select class="input" id="p-month">
+            <option>January</option><option>February</option><option>March</option><option>April</option>
+            <option>May</option><option selected>June</option><option>July</option><option>August</option>
+            <option>September</option><option>October</option><option>November</option><option>December</option>
+          </select>
+        </div>
+        <button class="btn bp bsm" onclick="predictLane()">Predict</button>
+      </div>
+      <div id="lane-pred" style="margin-top:.75rem"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       ROUTES
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-routes">
+    <div class="page-title">Route &amp; Fuel Optimizer</div>
+    <div class="page-sub">Cheapest fuel stops along your route with HOS checks</div>
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="frow">
+          <div><span class="lbl">Origin</span><input class="input" id="rt-orig" value="Dallas, TX"></div>
+          <div><span class="lbl">Destination</span><input class="input" id="rt-dest" value="Chicago, IL"></div>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">Fuel Level (%)</span><input class="input" type="number" id="rt-fuel" value="65"></div>
+          <div><span class="lbl">MPG</span><input class="input" type="number" id="rt-mpg" value="6.8" step="0.1"></div>
+        </div>
+        <button class="btn bp" onclick="optimizeRoute()">Optimize Route</button>
+      </div>
+      <div class="card" id="rt-sum-card" style="display:none">
+        <div class="card-title">Trip Summary</div>
+        <div id="rt-sum"></div>
+      </div>
+    </div>
+    <div class="card" id="fuel-card" style="display:none">
+      <div class="card-title">Recommended Fuel Stops</div>
+      <div id="fuel-stops"></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       INVOICING
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-invoicing">
+    <div class="page-title">Invoicing &amp; Paperwork</div>
+    <div class="page-sub">Auto-generate invoices, BOLs &amp; rate confirmations</div>
+    <div class="stabs">
+      <div class="stab active" onclick="invTab('create',this)">Create Invoice</div>
+      <div class="stab" onclick="invTab('history',this)">History</div>
+    </div>
+    <div id="inv-create">
+      <div class="g2">
+        <div>
+          <div class="frow">
+            <div><span class="lbl">Broker / Shipper</span><input class="input" id="i-broker" value="Coyote Logistics"></div>
+            <div><span class="lbl">Invoice #</span><input class="input" id="i-num" value="INV-2026-087"></div>
+          </div>
+          <div class="frow">
+            <div><span class="lbl">Origin</span><input class="input" id="i-orig" value="Dallas, TX"></div>
+            <div><span class="lbl">Destination</span><input class="input" id="i-dest" value="Chicago, IL"></div>
+          </div>
+          <div class="frow">
+            <div><span class="lbl">Miles</span><input class="input" type="number" id="i-miles" value="920" oninput="calcInv()"></div>
+            <div><span class="lbl">Rate/Mile ($)</span><input class="input" type="number" id="i-rpm" value="2.85" step="0.01" oninput="calcInv()"></div>
+          </div>
+          <div class="frow">
+            <div><span class="lbl">Fuel Surcharge ($)</span><input class="input" type="number" id="i-fsc" value="180" oninput="calcInv()"></div>
+            <div><span class="lbl">Detention ($)</span><input class="input" type="number" id="i-det" value="0" oninput="calcInv()"></div>
+          </div>
+          <button class="btn bp" onclick="calcInv()">Generate Invoice</button>
+        </div>
+        <div id="inv-preview"></div>
+      </div>
+    </div>
+    <div id="inv-history" style="display:none">
+      <div class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Invoice</th><th>Broker</th><th>Lane</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead><tbody id="inv-tbody"></tbody></table></div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       EXPENSES
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-expenses">
+    <div class="page-title">Expense Tracker</div>
+    <div class="page-sub">Track, categorize &amp; analyze all operating costs</div>
+    <div class="g4" style="margin-bottom:1rem">
+      <div class="card"><div class="card-title">This Month</div><div class="metric-val">$8,420</div><div class="metric-sub">Total expenses</div></div>
+      <div class="card"><div class="card-title">Fuel</div><div class="metric-val">$4,810</div><div class="metric-sub">57% of total</div></div>
+      <div class="card"><div class="card-title">Net Margin</div><div class="metric-val" style="color:var(--green)">31%</div><div class="metric-sub">After all costs</div></div>
+      <div class="card"><div class="card-title">Cost/Mile</div><div class="metric-val">$0.92</div><div class="metric-sub">CPM</div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="card-title">Breakdown</div><div id="exp-breakdown"></div></div>
+      <div class="card">
+        <div class="card-title">Log Expense</div>
+        <div style="margin-bottom:.75rem"><span class="lbl">Category</span>
+          <select class="input" id="exp-cat"><option>Fuel</option><option>Maintenance</option><option>Tolls</option><option>Permits</option><option>Food &amp; Lodging</option><option>Insurance</option><option>Other</option></select>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">Amount ($)</span><input class="input" type="number" id="exp-amt" placeholder="0.00"></div>
+          <div><span class="lbl">Date</span><input class="input" type="date" id="exp-date"></div>
+        </div>
+        <div style="margin-bottom:.75rem"><span class="lbl">Notes</span><input class="input" id="exp-note" placeholder="Description..."></div>
+        <button class="btn bp bsm" onclick="logExp()">Add Expense</button>
+        <div id="exp-confirm" style="margin-top:6px;font-size:12px;color:var(--green)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       COMMS
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-comms">
+    <div class="page-title">Customer Communications</div>
+    <div class="page-sub">AI-drafted messages for brokers, shippers &amp; receivers</div>
+    <div class="g2">
+      <div class="card" style="display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:.75rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)">
+          <div style="width:34px;height:34px;border-radius:50%;background:var(--blue-l);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--blue-d)">CL</div>
+          <div><div style="font-weight:600;font-size:14px">Coyote Logistics</div><div style="font-size:11px;color:var(--green)">● Online</div></div>
+          <span style="margin-left:auto;background:var(--amber);color:#fff;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:700">AI</span>
+        </div>
+        <div class="chat-scroll" id="chat-msgs"></div>
+        <div style="display:flex;gap:6px;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border)">
+          <input class="input" id="chat-in" placeholder="Type or let AI draft..." style="flex:1">
+          <button class="btn bp bsm" onclick="sendMsg()">Send</button>
+          <button class="btn bo bsm" onclick="aiDraft()">AI ↗</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Quick Templates</div>
+        <div id="templates"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       MAINTENANCE
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-maintenance">
+    <div class="page-title">Preventive Maintenance</div>
+    <div class="page-sub">Service schedule, reminders &amp; repair log</div>
+    <div class="alert-box">⚠️ <strong>Oil Change</strong> due in 2,100 miles — schedule soon</div>
+    <div class="g2">
+      <div class="card"><div class="card-title">Service Schedule</div><div id="maint-sched"></div></div>
+      <div class="card">
+        <div class="card-title">Log Service</div>
+        <div style="margin-bottom:.75rem"><span class="lbl">Service Type</span>
+          <select class="input" id="svc-type"><option>Oil Change</option><option>Tire Rotation</option><option>Brake Inspection</option><option>Air Filter</option><option>DOT Inspection</option><option>Other</option></select>
+        </div>
+        <div class="frow">
+          <div><span class="lbl">Mileage</span><input class="input" type="number" id="svc-mi" placeholder="Current miles"></div>
+          <div><span class="lbl">Cost ($)</span><input class="input" type="number" id="svc-cost" placeholder="0.00"></div>
+        </div>
+        <div style="margin-bottom:.75rem"><span class="lbl">Shop / Notes</span><input class="input" id="svc-note" placeholder="Flying J, I-20..."></div>
+        <button class="btn bp bsm" onclick="logSvc()">Log Service</button>
+        <div id="svc-confirm" style="margin-top:6px;font-size:12px;color:var(--green)"></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:1rem">
+      <div class="card-title">Service History</div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Service</th><th>Date</th><th>Mileage</th><th>Cost</th><th>Next Due</th></tr></thead><tbody id="svc-hist"></tbody></table></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       DASHBOARD
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-dashboard">
+    <div class="page-title">Dashboard</div>
+    <div class="page-sub">Complete business intelligence — week at a glance</div>
+
+    <!-- Row 1: Core KPIs -->
+    <div class="g4" style="margin-bottom:1rem">
+      <div class="card"><div class="card-title">Gross Revenue</div><div class="metric-val" style="color:var(--green)" id="d-gross">$14,230</div><div class="metric-sub">This week · 5 loads</div></div>
+      <div class="card"><div class="card-title">Net Profit</div><div class="metric-val" style="color:var(--green)" id="d-net">$4,812</div><div class="metric-sub" id="d-margin">Margin: 33.8%</div></div>
+      <div class="card"><div class="card-title">Break-Even RPM</div><div class="metric-val" style="color:var(--red)" id="d-breakeven">$1.95</div><div class="metric-sub">You're at $2.95 — <span style="color:var(--green)">+$1.00 above</span></div></div>
+      <div class="card"><div class="card-title">Fuel Efficiency</div><div class="metric-val" style="color:var(--amber)" id="d-mpg">6.8 mpg</div><div class="metric-sub" id="d-mpg-trend">▲ +0.3 vs last week</div></div>
+    </div>
+
+    <!-- Row 2: Revenue vs Expenses + Break-even gauge -->
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">Revenue vs Expenses — This Week</div>
+        <canvas id="dashChart" height="175"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">Break-Even Analysis</div>
+        <div style="margin-bottom:1rem">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span style="color:var(--ink3)">Break-even: <strong style="color:var(--red)">$1.95/mi</strong></span>
+            <span style="color:var(--ink3)">Current: <strong style="color:var(--green)">$2.95/mi</strong></span>
+          </div>
+          <div style="height:14px;background:var(--surface3);border-radius:7px;overflow:hidden;position:relative">
+            <div id="d-be-fill" style="height:100%;border-radius:7px;background:linear-gradient(90deg,var(--red),var(--amber),var(--green));width:75%"></div>
+            <div style="position:absolute;top:0;left:0;height:100%;display:flex;align-items:center;padding-left:6px;font-size:10px;font-weight:700;color:#fff">Break-even zone</div>
+          </div>
+          <div style="font-size:11px;color:var(--ink3);margin-top:4px">Must earn above $1.95/mi to cover all fixed &amp; variable costs</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px" id="d-be-breakdown"></div>
+      </div>
+    </div>
+
+    <!-- Row 3: Best & Worst lanes -->
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">🏆 Best-Paying Lanes</div>
+        <div id="d-best-lanes"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">⚠️ Worst-Paying Lanes</div>
+        <div id="d-worst-lanes"></div>
+      </div>
+    </div>
+
+    <!-- Row 4: Profit per load + per customer -->
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">Profit per Load</div>
+        <canvas id="profitPerLoadChart" height="175"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">Profit per Customer (Broker)</div>
+        <div id="d-profit-customer"></div>
+      </div>
+    </div>
+
+    <!-- Row 5: Profit per truck + Fuel efficiency trend -->
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">Profit per Truck — Unit TX-4821</div>
+        <div id="d-profit-truck"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Fuel Efficiency Trend (MPG)</div>
+        <canvas id="fuelEffChart" height="175"></canvas>
+      </div>
+    </div>
+
+    <!-- Row 6: Recommended loads + Action items -->
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">⚡ Recommended Loads to Accept</div>
+        <div style="font-size:12px;color:var(--ink3);margin-bottom:.75rem">AI-ranked above your break-even · sorted by net profit</div>
+        <div id="d-recommended"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Action Items</div>
+        <div id="action-items"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       ACCOUNTING
+  ══════════════════════════════════════════════════ -->
+  <div class="section" id="sec-accounting">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Accounting</div>
+        <div class="page-sub">P&amp;L · Tax summary · IFTA · CSV import from QuickBooks, Wave, Xero &amp; more</div>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn bo bsm" onclick="document.getElementById('csv-file-input').click()">⬆ Import CSV</button>
+        <input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleCSVImport(this)">
+        <button class="btn bp bsm" onclick="exportAccountingCSV()">⬇ Export</button>
+      </div>
+    </div>
+
+    <!-- Import banner (shown after import) -->
+    <div id="acct-import-banner" style="display:none" class="alert-box success" style="margin-bottom:1rem">
+      <span>✅</span><span id="acct-import-msg"></span>
+    </div>
+
+    <!-- Connected source pill -->
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;flex-wrap:wrap">
+      <div id="acct-source-pill" style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:var(--surface3);border:1.5px solid var(--border2);border-radius:20px;font-size:13px;font-weight:600">
+        <span>📊</span><span id="acct-source-name">Sample Data</span>
+        <span style="font-size:11px;color:var(--ink3);font-weight:400" id="acct-source-date">· Last updated Jun 5, 2026</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3)">Import a CSV from your accounting software to replace with real data</div>
+    </div>
+
+    <!-- Period selector -->
+    <div style="display:flex;gap:4px;margin-bottom:1.25rem;flex-wrap:wrap">
+      <button class="rb-period-btn active" onclick="acctPeriod('month',this)">This Month</button>
+      <button class="rb-period-btn" onclick="acctPeriod('quarter',this)">Q2 2026</button>
+      <button class="rb-period-btn" onclick="acctPeriod('ytd',this)">YTD</button>
+      <button class="rb-period-btn" onclick="acctPeriod('year',this)">Full Year</button>
+    </div>
+
+    <!-- KPI strip -->
+    <div class="g4" style="margin-bottom:1rem" id="acct-kpis"></div>
+
+    <!-- P&L + Expense breakdown -->
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">📈 Income vs Expenses</div>
+        <canvas id="acctPLChart" height="200"></canvas>
+      </div>
+      <div class="card">
+        <div class="card-title">🥧 Expense Breakdown</div>
+        <canvas id="acctDonutChart" height="200"></canvas>
+        <div id="acct-donut-legend" style="margin-top:.75rem"></div>
+      </div>
+    </div>
+
+    <!-- Tax summary + IFTA side by side -->
+    <div class="g2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-title">🧾 Tax Summary</div>
+        <div id="acct-tax-summary"></div>
+        <div style="margin-top:1rem;padding:10px;background:var(--blue-l);border-radius:8px;font-size:12px;color:var(--blue-d)">
+          ℹ️ These figures are estimates for planning purposes. Always confirm with a licensed tax professional or CPA.
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">⛽ IFTA Fuel Tax Summary</div>
+        <div id="acct-ifta"></div>
+        <div style="margin-top:1rem">
+          <button class="btn bo bsm" onclick="exportIFTA()">⬇ Export IFTA Report</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions ledger -->
+    <div class="card" style="margin-bottom:1rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+        <div class="card-title" style="margin-bottom:0">📋 Transaction Ledger</div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <input class="input" id="acct-search" placeholder="Search transactions…" oninput="filterTransactions(this.value)" style="width:180px;min-height:34px;padding:6px 10px;font-size:13px">
+          <select class="input" id="acct-cat-filter" onchange="filterTransactions(document.getElementById('acct-search').value)" style="width:140px;min-height:34px;padding:6px 10px;font-size:13px">
+            <option value="">All Categories</option>
+            <option>Income</option>
+            <option>Fuel</option>
+            <option>Maintenance</option>
+            <option>Insurance</option>
+            <option>Permits &amp; Licenses</option>
+            <option>Tolls</option>
+            <option>Meals</option>
+            <option>Communications</option>
+            <option>Office &amp; Admin</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="tbl-wrap">
+        <table class="tbl">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Type</th>
+              <th style="text-align:right">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="acct-txn-tbody"></tbody>
+        </table>
+      </div>
+      <div id="acct-txn-footer" style="display:flex;justify-content:space-between;align-items:center;margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:13px;color:var(--ink3)">
+        <span id="acct-txn-count"></span>
+        <button class="btn bo bsm" id="acct-load-more" onclick="acctShowMore()" style="display:none">Load more</button>
+      </div>
+    </div>
+
+    <!-- Add manual transaction -->
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">➕ Add Transaction</div>
+      <div class="frow">
+        <div>
+          <span class="lbl">Date</span>
+          <input class="input" type="date" id="txn-date">
+        </div>
+        <div>
+          <span class="lbl">Description</span>
+          <input class="input" id="txn-desc" placeholder="Fuel stop, broker payment…">
+        </div>
+      </div>
+      <div class="frow">
+        <div>
+          <span class="lbl">Category</span>
+          <select class="input" id="txn-cat">
+            <option>Income</option>
+            <option>Fuel</option>
+            <option>Maintenance</option>
+            <option>Insurance</option>
+            <option>Permits &amp; Licenses</option>
+            <option>Tolls</option>
+            <option>Meals</option>
+            <option>Communications</option>
+            <option>Office &amp; Admin</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <span class="lbl">Amount ($)</span>
+          <input class="input" type="number" id="txn-amt" placeholder="0.00" step="0.01">
+        </div>
+      </div>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+          <input type="radio" name="txn-type" value="income" checked> Income
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer">
+          <input type="radio" name="txn-type" value="expense"> Expense
+        </label>
+        <button class="btn bp bsm" onclick="addTransaction()" style="margin-left:auto">Add Transaction</button>
+      </div>
+    </div>
+
+    <!-- CSV import guide -->
+    <div class="card">
+      <div class="card-title">📥 Import from Your Accounting Software</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin-bottom:1rem">
+        <div class="acct-source-card" onclick="showImportGuide('quickbooks')">
+          <div class="acct-source-logo">🟩</div>
+          <div class="acct-source-lbl">QuickBooks</div>
+          <div class="acct-source-sub">Online &amp; Desktop</div>
+        </div>
+        <div class="acct-source-card" onclick="showImportGuide('wave')">
+          <div class="acct-source-logo">🌊</div>
+          <div class="acct-source-lbl">Wave</div>
+          <div class="acct-source-sub">Free accounting</div>
+        </div>
+        <div class="acct-source-card" onclick="showImportGuide('xero')">
+          <div class="acct-source-logo">🔵</div>
+          <div class="acct-source-lbl">Xero</div>
+          <div class="acct-source-sub">Cloud accounting</div>
+        </div>
+        <div class="acct-source-card" onclick="showImportGuide('freshbooks')">
+          <div class="acct-source-logo">📗</div>
+          <div class="acct-source-lbl">FreshBooks</div>
+          <div class="acct-source-sub">Invoicing &amp; expenses</div>
+        </div>
+        <div class="acct-source-card" onclick="showImportGuide('rigbooks')">
+          <div class="acct-source-logo">🚛</div>
+          <div class="acct-source-lbl">Rigbooks</div>
+          <div class="acct-source-sub">Trucking-specific</div>
+        </div>
+        <div class="acct-source-card" onclick="showImportGuide('spreadsheet')">
+          <div class="acct-source-logo">📊</div>
+          <div class="acct-source-lbl">Spreadsheet</div>
+          <div class="acct-source-sub">Excel / Google Sheets</div>
+        </div>
+      </div>
+      <div id="import-guide" style="display:none;background:var(--surface2);border-radius:var(--radius-sm);padding:1rem;font-size:13px;line-height:1.7"></div>
+    </div>
+  </div>
+
+  </div></div><!-- /main-inner /main -->
+
+  <!-- ── Mobile bottom navigation bar (thumb-zone) ── -->
+  <nav class="bottom-nav" id="bottom-nav" aria-label="Main navigation">
+    <!-- Populated by JS from tabOrder -->
+  </nav>
+
+</div><!-- /app -->
+
+<!-- More menu overlay (closes menu on backdrop tap) -->
+<div class="more-overlay" id="more-overlay" onclick="closeMoreMenu()"></div>
+<!-- More menu grid (secondary tabs on mobile) -->
+<div class="more-menu" id="more-menu" role="menu"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════
+const LOADS=[
+  {rank:1,from:"Dallas, TX",to:"Chicago, IL",miles:920,rate:2622,rpm:2.85,weight:"42,000 lbs",type:"Dry Van",pickup:"Today 14:00",stars:5,tags:["No-touch","Drop & Hook"]},
+  {rank:2,from:"Dallas, TX",to:"Memphis, TN",miles:452,rate:1265,rpm:2.80,weight:"38,500 lbs",type:"Reefer",pickup:"Today 16:30",stars:4,tags:["Temp Control"]},
+  {rank:3,from:"Fort Worth, TX",to:"Kansas City, MO",miles:680,rate:1836,rpm:2.70,weight:"44,000 lbs",type:"Dry Van",pickup:"Tomorrow 08:00",stars:4,tags:["Drop & Hook"]},
+  {rank:4,from:"Dallas, TX",to:"Atlanta, GA",miles:782,rate:1877,rpm:2.40,weight:"40,000 lbs",type:"Flatbed",pickup:"Tomorrow 10:00",stars:3,tags:["Tarping Required"]},
+  {rank:5,from:"Dallas, TX",to:"Denver, CO",miles:1040,rate:2184,rpm:2.10,weight:"36,000 lbs",type:"Dry Van",pickup:"Tomorrow 12:00",stars:3,tags:["Mountain Route"]},
+];
+const LANES=[
+  {lane:"Dallas → Chicago",avg:2.82,trend:"+8%",score:92},
+  {lane:"Houston → Atlanta",avg:2.65,trend:"+4%",score:84},
+  {lane:"FTW → Kansas City",avg:2.70,trend:"+11%",score:88},
+  {lane:"Dallas → Los Angeles",avg:2.50,trend:"-2%",score:71},
+  {lane:"San Antonio → Phoenix",avg:2.35,trend:"-5%",score:60},
+];
+const INVHIST=[
+  {num:"INV-2026-086",broker:"Echo Global",lane:"Houston → Nashville",amt:"$2,948",status:"Paid",date:"Jun 1"},
+  {num:"INV-2026-085",broker:"XPO Logistics",lane:"Dallas → Denver",amt:"$2,184",status:"Paid",date:"May 28"},
+  {num:"INV-2026-084",broker:"Coyote Logistics",lane:"FTW → KC",amt:"$1,836",status:"Processing",date:"May 25"},
+];
+const MSGS=[
+  {from:"in",sender:"Sarah @ Coyote",text:"Hey Tony, Dallas to Chicago load today — 920 mi at $2.85/mi. Available?",time:"10:42 AM"},
+  {from:"out",text:"Hi Sarah, that works. Can you send the full rate con? Need pickup time confirmed.",time:"10:45 AM"},
+  {from:"in",sender:"Sarah @ Coyote",text:"Sending now. Pickup 2pm at Sysco Foods, 1234 Industrial Blvd, Dallas.",time:"10:47 AM"},
+];
+const TMPLS=[
+  {title:"Check Call",body:"Hi, this is driver Tony, unit TX-4821. Currently at {location}, ETA {eta}. All good."},
+  {title:"Delay Notice",body:"Heads up — running ~{delay} behind due to {reason}. Updated ETA: {new_eta}."},
+  {title:"Delivery Confirm",body:"Load delivered and signed at {location} at {time}. POD in hand, uploading shortly."},
+  {title:"Rate Counter",body:"Appreciate the offer but {offered_rate} doesn't cover my costs here. Can do {counter_rate}."},
+];
+const MAINT=[
+  {icon:"🛢️",name:"Oil Change",last:"87,420 mi",next:"91420",cur:89320,interval:4000,status:"warning"},
+  {icon:"🔧",name:"Brake Inspection",last:"85,000 mi",next:"95000",cur:89320,interval:10000,status:"ok"},
+  {icon:"🛞",name:"Tire Rotation",last:"83,000 mi",next:"91000",cur:89320,interval:8000,status:"warning"},
+  {icon:"🔍",name:"Annual DOT",last:"Jan 2026",next:"Jan 2027",cur:89320,interval:null,status:"ok"},
+  {icon:"💨",name:"Air Filter",last:"80,000 mi",next:"90000",cur:89320,interval:10000,status:"due"},
+];
+
+// RigBook load data
+let rbLoads=[
+  {orig:"Dallas, TX",dest:"Chicago, IL",miles:920,gross:2622,fuel:540,other:85,date:"Jun 5",broker:"Coyote"},
+  {orig:"Houston, TX",dest:"Nashville, TN",miles:784,gross:2356,fuel:460,other:40,date:"Jun 3",broker:"Echo Global"},
+  {orig:"FTW, TX",dest:"Kansas City, MO",miles:680,gross:1836,fuel:398,other:55,date:"Jun 1",broker:"XPO"},
+  {orig:"Dallas, TX",dest:"Denver, CO",miles:1040,gross:2184,fuel:612,other:90,date:"May 29",broker:"TQL"},
+  {orig:"San Antonio, TX",dest:"Memphis, TN",miles:620,gross:1550,fuel:365,other:30,date:"May 27",broker:"CH Robinson"},
+];
+
+// AI eval history
+let evHistory=[
+  {lane:"Houston → Atlanta",rate:2640,score:88,rpm:2.72,verdict:"Accept",date:"Jun 4"},
+  {lane:"Dallas → Phoenix",rate:2100,score:62,rpm:2.10,verdict:"Counter",date:"Jun 2"},
+  {lane:"FTW → Memphis",rate:1265,score:79,rpm:2.80,verdict:"Accept",date:"May 31"},
+];
+
+// Fuel log
+let fuelLog=[
+  {loc:"Pilot - McAlester, OK",gal:95,price:3.72,date:"Jun 5"},
+  {loc:"Flying J - Springfield, IL",gal:88,price:3.79,date:"Jun 5"},
+  {loc:"Love's - Joplin, MO",gal:102,price:3.85,date:"Jun 3"},
+];
+
+let svcHist=[
+  {svc:"Oil Change",date:"Mar 12, 2026",mi:"87,420",cost:"$180",next:"91,420 mi"},
+  {svc:"Brake Inspection",date:"Feb 8, 2026",mi:"85,000",cost:"$340",next:"95,000 mi"},
+  {svc:"Annual DOT",date:"Jan 15, 2026",mi:"83,100",cost:"$650",next:"Jan 2027"},
+];
+let chatMsgs=[...MSGS];
+const charts={};
+
+// ══════════════════════════════════════════════════════
+// NAVIGATION — drag-to-reorder tabs with localStorage persistence
+// ══════════════════════════════════════════════════════
+
+const TAB_DEFAULTS = [
+  {id:'loads',      label:'📦 Loads'},
+  {id:'aieval',     label:'🤖 AI Eval'},
+  {id:'fuelopt',    label:'⛽ Fuel Opt'},
+  {id:'profitability',label:'📒 Profit'},
+  {id:'accounting', label:'🏦 Accounting'},
+  {id:'lanes',      label:'📈 Lanes'},
+  {id:'routes',     label:'🗺️ Route'},
+  {id:'invoicing',  label:'🧾 Invoice'},
+  {id:'expenses',   label:'💰 Expenses'},
+  {id:'comms',      label:'💬 Comms'},
+  {id:'maintenance',label:'🔧 Maint.'},
+  {id:'dashboard',  label:'📊 Dashboard'},
+];
+
+// Load saved order from localStorage, fall back to defaults
+function loadTabOrder(){
+  try {
+    const saved = localStorage.getItem('rc_tab_order');
+    if(saved){
+      const ids = JSON.parse(saved);
+      // Merge: keep saved order, append any new tabs not yet saved
+      const ordered = ids.map(id=>TAB_DEFAULTS.find(t=>t.id===id)).filter(Boolean);
+      const missing = TAB_DEFAULTS.filter(t=>!ids.includes(t.id));
+      return [...ordered, ...missing];
+    }
+  } catch(e){}
+  return [...TAB_DEFAULTS];
+}
+function saveTabOrder(tabs){
+  try { localStorage.setItem('rc_tab_order', JSON.stringify(tabs.map(t=>t.id))); } catch(e){}
+}
+
+let tabOrder = loadTabOrder();
+let activeTabId = 'loads';
+
+// ── Ghost element ──
+let ghost = null;
+function createGhost(label){
+  ghost = document.createElement('div');
+  ghost.className = 'nav-ghost';
+  ghost.textContent = label;
+  document.body.appendChild(ghost);
+}
+function moveGhost(x, y){
+  if(ghost){ ghost.style.left=(x+12)+'px'; ghost.style.top=(y-20)+'px'; }
+}
+function removeGhost(){
+  if(ghost){ ghost.remove(); ghost=null; }
+}
+
+// ── Render nav ──
+function renderNav(){
+  const bar = document.getElementById('nav-bar');
+  bar.innerHTML = '';
+
+  // Hint row (fades out after first drag)
+  const hint = document.createElement('div');
+  hint.className = 'nav-hint';
+  hint.id = 'nav-hint';
+  hint.innerHTML = '☰ Drag tabs to reorder';
+  bar.appendChild(hint);
+  if(localStorage.getItem('rc_dragged')) hint.style.opacity='0';
+
+  tabOrder.forEach(tab => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn' + (tab.id===activeTabId?' active':'');
+    btn.dataset.id = tab.id;
+    btn.textContent = tab.label;
+    btn.setAttribute('aria-label', tab.label);
+
+    // ── Click to navigate ──
+    btn.addEventListener('click', e => {
+      if(btn.classList.contains('was-dragging')){ btn.classList.remove('was-dragging'); return; }
+      show(tab.id, btn);
+    });
+
+    // ── Mouse drag ──
+    btn.addEventListener('mousedown', e => {
+      if(e.button !== 0) return;
+      initDrag(btn, tab, e.clientX, e.clientY, 'mouse');
+    });
+
+    // ── Touch drag ──
+    btn.addEventListener('touchstart', e => {
+      const t = e.touches[0];
+      initDrag(btn, tab, t.clientX, t.clientY, 'touch');
+    }, {passive:true});
+
+    bar.appendChild(btn);
+  });
+}
+
+// ── Drag state ──
+let dragState = null;
+
+function initDrag(btn, tab, startX, startY, mode){
+  let moved = false;
+  const THRESHOLD = 6; // px before drag activates
+
+  dragState = { btn, tab, startX, startY, mode, moved, active:false };
+
+  function onMove(cx, cy){
+    if(!dragState) return;
+    const dx = Math.abs(cx - dragState.startX);
+    const dy = Math.abs(cy - dragState.startY);
+
+    if(!dragState.active && (dx > THRESHOLD || dy > THRESHOLD)){
+      dragState.active = true;
+      dragState.moved = true;
+      btn.classList.add('dragging');
+      createGhost(tab.label);
+      // Hide hint permanently after first drag
+      const hint = document.getElementById('nav-hint');
+      if(hint){ hint.style.opacity='0'; localStorage.setItem('rc_dragged','1'); }
+    }
+
+    if(dragState.active){
+      moveGhost(cx, cy);
+      highlightTarget(cx, cy);
+    }
+  }
+
+  function onEnd(cx, cy){
+    if(!dragState) return;
+    const wasActive = dragState.active;
+
+    if(wasActive){
+      btn.classList.remove('dragging');
+      btn.classList.add('was-dragging');
+      removeGhost();
+      clearHighlights();
+      const target = getTargetTab(cx, cy);
+      if(target && target !== btn){
+        reorder(btn.dataset.id, target.dataset.id);
+      }
+      setTimeout(()=>btn.classList.remove('was-dragging'), 50);
+    }
+
+    cleanup();
+  }
+
+  // Mouse handlers
+  function onMouseMove(e){ onMove(e.clientX, e.clientY); }
+  function onMouseUp(e){ onEnd(e.clientX, e.clientY); }
+
+  // Touch handlers
+  function onTouchMove(e){
+    const t = e.touches[0];
+    onMove(t.clientX, t.clientY);
+  }
+  function onTouchEnd(e){
+    const t = e.changedTouches[0];
+    onEnd(t.clientX, t.clientY);
+  }
+
+  function cleanup(){
+    dragState = null;
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener('touchmove', onTouchMove);
+    document.removeEventListener('touchend', onTouchEnd);
+  }
+
+  if(mode==='mouse'){
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  } else {
+    document.addEventListener('touchmove', onTouchMove, {passive:true});
+    document.addEventListener('touchend', onTouchEnd);
+  }
+}
+
+function highlightTarget(cx, cy){
+  clearHighlights();
+  const target = getTargetTab(cx, cy);
+  if(target && target !== dragState?.btn) target.classList.add('drag-over');
+}
+
+function clearHighlights(){
+  document.querySelectorAll('.nav-btn.drag-over').forEach(b=>b.classList.remove('drag-over'));
+}
+
+function getTargetTab(cx, cy){
+  const btns = Array.from(document.querySelectorAll('#nav-bar .nav-btn'));
+  return btns.find(b => {
+    const r = b.getBoundingClientRect();
+    return cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom;
+  }) || null;
+}
+
+function reorder(fromId, toId){
+  const fromIdx = tabOrder.findIndex(t=>t.id===fromId);
+  const toIdx   = tabOrder.findIndex(t=>t.id===toId);
+  if(fromIdx === -1 || toIdx === -1 || fromIdx === toIdx) return;
+
+  const [moved] = tabOrder.splice(fromIdx, 1);
+  tabOrder.splice(toIdx, 0, moved);
+  saveTabOrder(tabOrder);
+  renderNav();
+  renderBottomNav(); // keep bottom nav in sync with dragged order
+
+  // Flash the moved tab to confirm
+  const movedBtn = document.querySelector(`#nav-bar [data-id="${fromId}"]`);
+  if(movedBtn){
+    movedBtn.style.transition='background .05s';
+    movedBtn.style.background='var(--amber-l)';
+    setTimeout(()=>{ movedBtn.style.background=''; movedBtn.style.transition=''; }, 400);
+  }
+}
+
+// ── Bottom navigation bar ─────────────────────────────
+// Shows top 4 tabs from tabOrder + a "More" button
+// Respects drag-reordered tab order from the top nav
+const BOTTOM_NAV_COUNT = 4; // number of primary tabs before "More"
+
+function renderBottomNav(){
+  const nav = document.getElementById('bottom-nav');
+  if(!nav) return;
+
+  const primary = tabOrder.slice(0, BOTTOM_NAV_COUNT);
+  const secondary = tabOrder.slice(BOTTOM_NAV_COUNT);
+
+  nav.innerHTML = primary.map(tab => {
+    const emoji = tab.label.split(' ')[0];
+    const text  = tab.label.split(' ').slice(1).join(' ');
+    const isActive = tab.id === activeTabId;
+    return `<button class="bn-btn${isActive?' active':''}" data-id="${tab.id}" onclick="bnNav('${tab.id}')" aria-label="${tab.label}">
+      <div class="bn-icon">${emoji}</div>
+      <div class="bn-label">${text}</div>
+      <div class="bn-notif" id="bn-notif-${tab.id}"></div>
+    </button>`;
+  }).join('') + `
+    <button class="bn-btn${secondary.some(t=>t.id===activeTabId)?' active':''}" onclick="openMoreMenu()" aria-label="More tabs">
+      <div class="bn-icon">⋯</div>
+      <div class="bn-label">More</div>
+    </button>`;
+
+  // Rebuild more menu
+  const menu = document.getElementById('more-menu');
+  if(menu){
+    menu.innerHTML = secondary.map(tab => {
+      const emoji = tab.label.split(' ')[0];
+      const text  = tab.label.split(' ').slice(1).join(' ');
+      return `<div class="more-item" onclick="bnNav('${tab.id}')" role="menuitem">
+        <div class="mi-icon">${emoji}</div>
+        <div>${text}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Sync notification dots
+  syncBnNotifs();
+}
+
+function syncBnNotifs(){
+  // Maintenance alert dot
+  const maintNotif = document.getElementById('bn-notif-maintenance');
+  if(maintNotif) maintNotif.classList.toggle('show', !!document.querySelector('.notif'));
+}
+
+function bnNav(id){
+  closeMoreMenu();
+  const btn = document.querySelector(`#nav-bar [data-id="${id}"]`);
+  show(id, btn);
+}
+
+function openMoreMenu(){
+  document.getElementById('more-menu')?.classList.add('open');
+  document.getElementById('more-overlay')?.classList.add('open');
+}
+
+function closeMoreMenu(){
+  document.getElementById('more-menu')?.classList.remove('open');
+  document.getElementById('more-overlay')?.classList.remove('open');
+}
+
+// sectionInits is a function so tab handlers resolve lazily at call time,
+// allowing accounting functions defined in a later script block to be found.
+function getSectionInit(id){
+  const map={
+    lanes:initLanes, invoicing:()=>{calcInv();renderInvHist();},
+    comms:renderComms, maintenance:renderMaint,
+    loads:()=>searchLoads(), expenses:renderExp,
+    dashboard:initDash, profitability:initProfitability,
+    aieval:initAIEval, fuelopt:initFuelOpt,
+    accounting:()=>typeof initAccounting==='function'&&initAccounting()
+  };
+  return map[id];
+}
+// track extra dashboard charts
+charts.ppl=null; charts.fuelEff=null;
+
+function show(id, el){
+  activeTabId = id;
+  closeMoreMenu();
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  // Scroll active tab into view on desktop nav
+  const activeBtn = document.querySelector(`#nav-bar [data-id="${id}"]`);
+  if(activeBtn) activeBtn.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  // Sync bottom nav active state
+  document.querySelectorAll('.bn-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.id===id);
+  });
+  // Scroll section to top on mobile
+  document.querySelector('.main')?.scrollTo({top:0,behavior:'smooth'});
+  getSectionInit(id)?.();
+}
+
+// ══════════════════════════════════════════════════════
+// LOADS — dynamic generation + manual paste + book→profit
+// ══════════════════════════════════════════════════════
+
+// Pool of destination cities with typical market rates per corridor
+const DEST_POOL={
+  "Dallas, TX":[
+    {to:"Chicago, IL",    miles:920,  baseRpm:2.82, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"Memphis, TN",    miles:452,  baseRpm:2.78, type:"Reefer",   tags:["Temp Control"]},
+    {to:"Kansas City, MO",miles:680,  baseRpm:2.70, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"Atlanta, GA",    miles:782,  baseRpm:2.45, type:"Flatbed",  tags:["Tarping Required"]},
+    {to:"Denver, CO",     miles:1040, baseRpm:2.12, type:"Dry Van",  tags:["Mountain Route"]},
+    {to:"Nashville, TN",  miles:665,  baseRpm:2.65, type:"Dry Van",  tags:["No-touch"]},
+    {to:"Indianapolis, IN",miles:870, baseRpm:2.55, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"St. Louis, MO",  miles:630,  baseRpm:2.60, type:"Reefer",   tags:["Temp Control","No-touch"]},
+    {to:"Houston, TX",    miles:240,  baseRpm:2.90, type:"Flatbed",  tags:[]},
+    {to:"Oklahoma City, OK",miles:205,baseRpm:2.80, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"Phoenix, AZ",    miles:1070, baseRpm:2.20, type:"Dry Van",  tags:[]},
+    {to:"Los Angeles, CA",miles:1430, baseRpm:2.05, type:"Dry Van",  tags:["Toll Route"]},
+  ],
+  "Houston, TX":[
+    {to:"Atlanta, GA",    miles:790,  baseRpm:2.68, type:"Dry Van",  tags:["No-touch"]},
+    {to:"Nashville, TN",  miles:800,  baseRpm:2.62, type:"Dry Van",  tags:[]},
+    {to:"Dallas, TX",     miles:240,  baseRpm:2.88, type:"Flatbed",  tags:[]},
+    {to:"Chicago, IL",    miles:1090, baseRpm:2.55, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"Denver, CO",     miles:1110, baseRpm:2.15, type:"Dry Van",  tags:["Mountain Route"]},
+    {to:"Jacksonville, FL",miles:835, baseRpm:2.42, type:"Reefer",   tags:["Temp Control"]},
+  ],
+  "Chicago, IL":[
+    {to:"Dallas, TX",     miles:920,  baseRpm:2.50, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"Atlanta, GA",    miles:718,  baseRpm:2.72, type:"Dry Van",  tags:["No-touch"]},
+    {to:"Detroit, MI",    miles:280,  baseRpm:3.10, type:"Dry Van",  tags:[]},
+    {to:"Columbus, OH",   miles:358,  baseRpm:2.95, type:"Flatbed",  tags:[]},
+    {to:"Kansas City, MO",miles:499,  baseRpm:2.60, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"Memphis, TN",    miles:534,  baseRpm:2.68, type:"Reefer",   tags:["Temp Control"]},
+  ],
+  "Atlanta, GA":[
+    {to:"Dallas, TX",     miles:782,  baseRpm:2.62, type:"Dry Van",  tags:[]},
+    {to:"Chicago, IL",    miles:718,  baseRpm:2.78, type:"Dry Van",  tags:["Drop & Hook"]},
+    {to:"Charlotte, NC",  miles:245,  baseRpm:3.05, type:"Flatbed",  tags:[]},
+    {to:"Nashville, TN",  miles:249,  baseRpm:3.00, type:"Dry Van",  tags:["No-touch"]},
+    {to:"Jacksonville, FL",miles:349, baseRpm:2.55, type:"Reefer",   tags:["Temp Control"]},
+    {to:"Memphis, TN",    miles:394,  baseRpm:2.70, type:"Dry Van",  tags:[]},
+  ],
+};
+const GENERIC_POOL=[
+  {to:"Chicago, IL",    miles:850,  baseRpm:2.70, type:"Dry Van",  tags:["Drop & Hook"]},
+  {to:"Atlanta, GA",    miles:720,  baseRpm:2.65, type:"Dry Van",  tags:["No-touch"]},
+  {to:"Dallas, TX",     miles:600,  baseRpm:2.78, type:"Flatbed",  tags:[]},
+  {to:"Memphis, TN",    miles:480,  baseRpm:2.72, type:"Reefer",   tags:["Temp Control"]},
+  {to:"Kansas City, MO",miles:650,  baseRpm:2.60, type:"Dry Van",  tags:[]},
+  {to:"Nashville, TN",  miles:550,  baseRpm:2.68, type:"Dry Van",  tags:["Drop & Hook"]},
+  {to:"Denver, CO",     miles:1050, baseRpm:2.18, type:"Dry Van",  tags:["Mountain Route"]},
+  {to:"Indianapolis, IN",miles:800, baseRpm:2.55, type:"Dry Van",  tags:[]},
+];
+
+const WEIGHTS=["36,000 lbs","38,500 lbs","40,000 lbs","42,000 lbs","43,500 lbs","44,000 lbs"];
+const BROKERS=["Coyote Logistics","Echo Global","XPO Logistics","TQL","CH Robinson","Transplace","MoLo Solutions","Arrive Logistics"];
+const TAG_EXTRAS=[["No-touch"],["Drop & Hook"],["No-touch","Drop & Hook"],[],[]];
+
+let manualLoads = [];   // loads added via paste form
+let bookedLoads  = [];  // loads user has booked
+let generatedLoads = []; // last search result cache
+
+function generateLoads(from, toFilter, typeFilter, minRpm){
+  const fromKey = Object.keys(DEST_POOL).find(k=>from.toLowerCase().includes(k.split(',')[0].toLowerCase()));
+  const pool = fromKey ? DEST_POOL[fromKey] : GENERIC_POOL;
+
+  // Build candidates: pool + any manual loads matching from city
+  const manualMatching = manualLoads.filter(l=>l.from.toLowerCase().includes(from.split(',')[0].toLowerCase()));
+  let candidates = [
+    ...pool.map(p=>({...p, isManual:false})),
+    ...manualMatching.map(l=>({to:l.to, miles:l.miles, baseRpm:l.rpm, type:l.type, tags:l.tags, isManual:true, _manual:l}))
+  ];
+
+  // Apply filters
+  if(toFilter) candidates=candidates.filter(c=>c.to.toLowerCase().includes(toFilter.toLowerCase()));
+  if(typeFilter) candidates=candidates.filter(c=>c.type===typeFilter);
+
+  // Generate with market variance (±8%)
+  const seed = from.length + (toFilter||'').length; // consistent per search
+  const loads = candidates.map((c,i)=>{
+    if(c.isManual) return c._manual; // manual loads pass through as-is
+    const variance = 0.92 + (((seed*17+i*31)%160)/1000); // pseudo-random but stable
+    const rpm = parseFloat((c.baseRpm * variance).toFixed(2));
+    const rate = Math.round(c.miles * rpm);
+    const fuelCost = Math.round(c.miles / 6.8 * 3.84);
+    const estNet = rate - fuelCost - Math.round(c.miles * 0.26);
+    const stars = rpm >= 2.75 ? 5 : rpm >= 2.55 ? 4 : rpm >= 2.30 ? 3 : 2;
+    const weight = WEIGHTS[i % WEIGHTS.length];
+    const broker = BROKERS[i % BROKERS.length];
+    const extraTags = TAG_EXTRAS[i % TAG_EXTRAS.length];
+    const allTags = [...new Set([...c.tags, ...extraTags])];
+    const pickupOptions = ['Today 10:00','Today 12:00','Today 14:00','Today 16:00','Tomorrow 07:00','Tomorrow 09:00','Tomorrow 11:00','Tomorrow 14:00'];
+    const pickup = pickupOptions[(i*3) % pickupOptions.length];
+    return {rank:i+1, from, to:c.to, miles:c.miles, rate, rpm, weight, type:c.type, pickup, stars, tags:allTags, broker, estNet};
+  });
+
+  // Apply min RPM filter
+  let filtered = minRpm ? loads.filter(l=>l.rpm >= parseFloat(minRpm)) : loads;
+
+  // Score and rank: weighted net profit + rpm
+  filtered.forEach(l=>{
+    const fuelCost=l.miles/6.8*3.84;
+    l._score = (l.rate - fuelCost - l.miles*0.26) * 0.7 + l.rpm * 200;
+  });
+  filtered.sort((a,b)=>b._score-a._score);
+  filtered.forEach((l,i)=>l.rank=i+1);
+
+  return filtered;
+}
+
+function renderLoads(list){
+  if(!list.length){
+    document.getElementById('loads-list').innerHTML='<div style="text-align:center;padding:2rem;color:var(--ink3);font-size:14px">No loads found matching your criteria. Try adjusting filters.</div>';
+    return;
+  }
+  const breakeven = 1.95;
+  document.getElementById('loads-list').innerHTML=list.map(l=>{
+    const fuelCost=Math.round(l.miles/6.8*3.84);
+    const estNet=l.rate-fuelCost-Math.round(l.miles*0.26);
+    const aboveBe = l.rpm > breakeven;
+    const netColor = estNet>800?'var(--green)':estNet>300?'var(--amber)':'var(--red)';
+    return `<div class="load-card" style="${l.rank===1?'border-color:var(--amber);background:var(--amber-l)':''}">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:4px">
+          <span class="rank-dot" style="${l.rank===1?'background:var(--amber)':''}">${l.rank}</span>
+          <span style="font-size:14px;font-weight:700">${l.from} → ${l.to}</span>
+          <span class="stars">${'★'.repeat(l.stars)}${'☆'.repeat(5-l.stars)}</span>
+          ${l.isManual?'<span class="badge bp2" style="font-size:10px">Manual</span>':''}
+        </div>
+        <div style="font-size:12px;color:var(--ink3);margin-bottom:5px;padding-left:28px">
+          ${l.miles} mi · ${l.weight} · ${l.type} · ${l.pickup} · <em>${l.broker}</em>
+        </div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap;padding-left:28px;margin-bottom:4px">
+          ${l.tags.map(t=>`<span class="badge bb">${t}</span>`).join('')}
+          ${aboveBe?`<span class="badge bg">Above break-even</span>`:'<span class="badge br">Below break-even</span>'}
+        </div>
+        <div style="padding-left:28px;font-size:12px;color:${netColor}">Est. net after fuel & costs: <strong>$${estNet.toLocaleString()}</strong></div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;padding-left:10px">
+        <div style="font-size:19px;font-weight:700;color:var(--green)">$${l.rate.toLocaleString()}</div>
+        <div style="font-size:12px;color:var(--ink3)">$${l.rpm.toFixed(2)}/mi</div>
+        <button class="btn bp bsm" style="margin-top:6px" onclick="bookLoad(${l.rank})">Book</button>
+        <button class="btn bo bsm" style="margin-top:4px;display:block;width:100%" onclick="evalLoad(${l.rank})">AI Eval</button>
+      </div>
+    </div>`;}).join('');
+}
+
+function searchLoads(){
+  const from    = document.getElementById('ld-from').value.trim() || 'Dallas, TX';
+  const to      = document.getElementById('ld-to').value.trim();
+  const type    = document.getElementById('ld-type').value;
+  const minRpm  = document.getElementById('ld-minrpm').value;
+  generatedLoads = generateLoads(from, to, type, minRpm);
+  renderLoads(generatedLoads);
+}
+
+function bookLoad(rank){
+  const l = generatedLoads.find(x=>x.rank===rank);
+  if(!l) return;
+  const fuelCost = Math.round(l.miles/6.8*3.84);
+  const estNet   = l.rate - fuelCost - Math.round(l.miles*0.26);
+  const confirmed = confirm(`Book this load?\n\n${l.from} → ${l.to}\n$${l.rate.toLocaleString()} · ${l.miles} mi · $${l.rpm.toFixed(2)}/mi\nPickup: ${l.pickup}\nBroker: ${l.broker}\n\nEst. fuel: $${fuelCost} · Est. net: $${estNet.toLocaleString()}\n\nThis will also log it in your Profitability tracker.`);
+  if(!confirmed) return;
+
+  // Add to booked loads display
+  bookedLoads.unshift({...l, bookedAt: new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+  renderBookedLoads();
+
+  // ── Auto-log to Profitability tracker ──
+  rbLoads.unshift({
+    orig:   l.from,
+    dest:   l.to,
+    miles:  l.miles,
+    gross:  l.rate,
+    fuel:   fuelCost,
+    other:  Math.round(l.miles*0.08),
+    date:   'Today',
+    broker: l.broker
+  });
+
+  alert(`✅ Load booked!\n\n${l.from} → ${l.to}\n$${l.rate.toLocaleString()} · ${l.miles} miles\n\nAutomatically logged in your Profitability tracker. Check the 📒 Profit tab to see it.`);
+}
+
+function evalLoad(rank){
+  const l = generatedLoads.find(x=>x.rank===rank);
+  if(!l) return;
+  // Pre-fill AI eval form and switch to that tab
+  document.getElementById('ev-orig').value  = l.from;
+  document.getElementById('ev-dest').value  = l.to;
+  document.getElementById('ev-miles').value = l.miles;
+  document.getElementById('ev-rate').value  = l.rate;
+  document.getElementById('ev-type').value  = l.type;
+  const btn = document.querySelector('.nav-btn[onclick*="aieval"]');
+  if(btn) show('aieval', btn);
+  setTimeout(()=>runAIEval(), 100);
+}
+
+function renderBookedLoads(){
+  const panel = document.getElementById('booked-panel');
+  if(!bookedLoads.length){ panel.style.display='none'; return; }
+  panel.style.display='block';
+  document.getElementById('booked-list').innerHTML = bookedLoads.map(l=>{
+    const fuelCost=Math.round(l.miles/6.8*3.84);
+    const estNet=l.rate-fuelCost-Math.round(l.miles*0.26);
+    return `<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--green);border-radius:8px;margin-bottom:.5rem">
+      <span style="font-size:18px">✅</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13px">${l.from} → ${l.to}</div>
+        <div style="font-size:12px;color:var(--ink3)">${l.miles} mi · ${l.broker} · Booked ${l.bookedAt}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-weight:700;color:var(--green)">$${l.rate.toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--ink3)">~$${estNet.toLocaleString()} net</div>
+      </div>
+    </div>`;}).join('');
+}
+
+function togglePasteForm(){
+  const f = document.getElementById('paste-form');
+  f.style.display = f.style.display==='none' ? 'block' : 'none';
+}
+
+function addManualLoad(){
+  const orig   = document.getElementById('pf-orig').value.trim();
+  const dest   = document.getElementById('pf-dest').value.trim();
+  const miles  = parseFloat(document.getElementById('pf-miles').value);
+  const rate   = parseFloat(document.getElementById('pf-rate').value);
+  const weight = document.getElementById('pf-weight').value || '40,000 lbs';
+  const type   = document.getElementById('pf-type').value;
+  const pickup = document.getElementById('pf-pickup').value || 'TBD';
+  const broker = document.getElementById('pf-broker').value || 'Direct';
+  const notes  = document.getElementById('pf-notes').value;
+
+  if(!orig||!dest||!miles||!rate){
+    document.getElementById('pf-confirm').style.color='var(--red)';
+    document.getElementById('pf-confirm').textContent='Please fill in origin, destination, miles and rate.';
+    return;
+  }
+  const rpm = parseFloat((rate/miles).toFixed(2));
+  const stars = rpm>=2.75?5:rpm>=2.55?4:rpm>=2.30?3:2;
+  const tags = notes ? notes.split(',').map(s=>s.trim()).filter(Boolean) : [];
+
+  manualLoads.unshift({rank:0, from:orig, to:dest, miles, rate, rpm, weight, type, pickup, stars, tags, broker, isManual:true});
+
+  document.getElementById('pf-confirm').style.color='var(--green)';
+  document.getElementById('pf-confirm').textContent=`✓ Load added: ${orig} → ${dest} at $${rpm.toFixed(2)}/mi — click Search to see it ranked.`;
+
+  // Clear form
+  ['pf-orig','pf-dest','pf-miles','pf-rate','pf-weight','pf-pickup','pf-broker','pf-notes'].forEach(id=>document.getElementById(id).value='');
+
+  // Re-run search to include new manual load
+  searchLoads();
+}
+
+// ══════════════════════════════════════════════════════
+// AI LOAD EVALUATOR
+// ══════════════════════════════════════════════════════
+function initAIEval(){
+  renderEvHistory();
+  document.getElementById('ev-date').value=new Date().toISOString().split('T')[0];
+}
+function renderEvHistory(){
+  document.getElementById('ev-history').innerHTML=evHistory.map(e=>`
+    <tr>
+      <td style="font-weight:600">${e.lane}</td>
+      <td>$${e.rate.toLocaleString()}</td>
+      <td><span style="font-weight:700;color:${e.score>=80?'var(--green)':e.score>=65?'var(--amber)':'var(--red)'}">${e.score}</span>/100</td>
+      <td>$${e.rpm.toFixed(2)}/mi</td>
+      <td><span class="badge ${e.verdict==='Accept'?'bg':e.verdict==='Counter'?'ba':'br'}">${e.verdict}</span></td>
+      <td>${e.date}</td>
+    </tr>`).join('');
+}
+function runAIEval(){
+  const orig=document.getElementById('ev-orig').value;
+  const dest=document.getElementById('ev-dest').value;
+  const miles=parseFloat(document.getElementById('ev-miles').value)||920;
+  const rate=parseFloat(document.getElementById('ev-rate').value)||2350;
+  const weight=parseFloat(document.getElementById('ev-weight').value)||42000;
+  const type=document.getElementById('ev-type').value;
+  const notes=document.getElementById('ev-notes').value;
+
+  const rpm=(rate/miles);
+  const fuelCost=miles/6.8*3.84;
+  const driverPay=miles*0.18;
+  const otherCost=miles*0.08;
+  const totalCost=fuelCost+driverPay+otherCost+120;
+  const net=rate-totalCost;
+  const margin=net/rate*100;
+
+  // Score factors
+  const rpmScore=Math.min(100,Math.round((rpm-1.5)/2.5*100));
+  const marginScore=Math.min(100,Math.round(margin/40*100));
+  const weightScore=weight>44000?60:weight>40000?80:95;
+  const typeScore=type==='Dry Van'?90:type==='Reefer'?85:type==='Flatbed'?70:80;
+  const distScore=miles>1200?65:miles>500?90:75;
+  const totalScore=Math.round(rpmScore*.35+marginScore*.30+weightScore*.10+typeScore*.15+distScore*.10);
+
+  const verdict=totalScore>=80?'Accept':totalScore>=65?'Counter':'Pass';
+  const verdictColor=verdict==='Accept'?'var(--green)':verdict==='Counter'?'var(--amber)':'var(--red)';
+  const marketRpm=2.72;
+  const vsMarket=((rpm-marketRpm)/marketRpm*100).toFixed(1);
+
+  // Result panel
+  document.getElementById('ev-result-panel').innerHTML=`
+    <div class="eval-card ${totalScore>=80?'good':totalScore>=65?'warn':'bad'}">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem">
+        <div>
+          <div style="font-size:13px;color:var(--ink3);margin-bottom:2px">${orig} → ${dest}</div>
+          <div style="font-size:16px;font-weight:700">${miles} mi · ${type}</div>
+        </div>
+        <div style="margin-left:auto;text-align:center">
+          <div style="font-size:42px;font-weight:700;color:${totalScore>=80?'var(--green)':totalScore>=65?'var(--amber)':'var(--red)'};line-height:1">${totalScore}</div>
+          <div style="font-size:11px;color:var(--ink3)">/ 100</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem">
+        <div style="background:var(--surface2);border-radius:8px;padding:10px">
+          <div style="font-size:11px;color:var(--ink3)">Offered Rate</div>
+          <div style="font-size:18px;font-weight:700">$${rate.toLocaleString()}</div>
+          <div style="font-size:12px;color:var(--ink3)">$${rpm.toFixed(2)}/mi</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:10px">
+          <div style="font-size:11px;color:var(--ink3)">Est. Net Profit</div>
+          <div style="font-size:18px;font-weight:700;color:${net>0?'var(--green)':'var(--red)'}">${net>0?'+':''}$${Math.round(net).toLocaleString()}</div>
+          <div style="font-size:12px;color:var(--ink3)">${margin.toFixed(1)}% margin</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:10px">
+          <div style="font-size:11px;color:var(--ink3)">vs Market Rate</div>
+          <div style="font-size:18px;font-weight:700;color:${vsMarket>=0?'var(--green)':'var(--red)'}">${vsMarket>=0?'+':''}${vsMarket}%</div>
+          <div style="font-size:12px;color:var(--ink3)">Market avg $${marketRpm}/mi</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:10px">
+          <div style="font-size:11px;color:var(--ink3)">AI Verdict</div>
+          <div style="font-size:18px;font-weight:700;color:${verdictColor}">${verdict}</div>
+          <div style="font-size:12px;color:var(--ink3)">${verdict==='Counter'?`Try $${(rate*1.12).toFixed(0)}`:'Based on all factors'}</div>
+        </div>
+      </div>
+      <div style="padding:10px;background:var(--surface2);border-radius:8px;font-size:13px;line-height:1.6;color:var(--ink2)">
+        <strong style="color:var(--ink)">AI Analysis:</strong> ${totalScore>=80?`This is a strong load. RPM of $${rpm.toFixed(2)} is ${vsMarket>=0?`${vsMarket}% above`:`${Math.abs(vsMarket)}% below`} market. Estimated net of $${Math.round(net).toLocaleString()} after fuel and operating costs at ${margin.toFixed(1)}% margin. Recommend accepting.`:totalScore>=65?`Marginal load. RPM of $${rpm.toFixed(2)} is ${Math.abs(vsMarket)}% below market average. Consider countering at $${(rate*1.10).toFixed(0)} (${(rate*1.10/miles).toFixed(2)}/mi). Fuel cost alone is $${Math.round(fuelCost).toLocaleString()}.`:`Below-cost load. At $${rpm.toFixed(2)}/mi you would net only $${Math.round(net).toLocaleString()} after expenses — ${margin<0?'a loss':'thin margin'}. Pass unless you need to deadhead back anyway.`}
+      </div>
+    </div>`;
+
+  // Factor bars
+  document.getElementById('ev-factors-panel').style.display='block';
+  const factors=[
+    {name:"Rate per Mile",score:rpmScore,detail:`$${rpm.toFixed(2)}/mi`},
+    {name:"Profit Margin",score:marginScore,detail:`${margin.toFixed(1)}%`},
+    {name:"Load Type Fit",score:typeScore,detail:type},
+    {name:"Weight Risk",score:weightScore,detail:`${(weight/1000).toFixed(0)}k lbs`},
+    {name:"Distance",score:distScore,detail:`${miles} mi`},
+  ];
+  document.getElementById('ev-factors').innerHTML=factors.map(f=>`
+    <div class="ai-factor">
+      <div style="width:130px;font-size:13px;font-weight:600">${f.name}</div>
+      <div class="ai-factor-bar"><div class="ai-factor-fill" style="width:${f.score}%;background:${f.score>=80?'var(--green)':f.score>=60?'var(--amber)':'var(--red)'}"></div></div>
+      <div style="width:60px;text-align:right;font-size:12px;color:var(--ink3)">${f.score}/100</div>
+      <div style="width:70px;text-align:right;font-size:12px;font-weight:600">${f.detail}</div>
+    </div>`).join('');
+
+  // Add to history
+  evHistory.unshift({lane:`${orig.split(',')[0]} → ${dest.split(',')[0]}`,rate,score:totalScore,rpm:parseFloat(rpm.toFixed(2)),verdict,date:'Today'});
+  renderEvHistory();
+}
+
+// ══════════════════════════════════════════════════════
+// FUEL OPTIMIZATION
+// ══════════════════════════════════════════════════════
+function initFuelOpt(){
+  renderFuelLog();
+  renderNearby();
+  initFuelTrend();
+  document.getElementById('fl-date').value=new Date().toISOString().split('T')[0];
+}
+function updateGauge(val){
+  const tank=parseFloat(document.getElementById('fo-tank').value)||150;
+  const gal=(val/100*tank).toFixed(1);
+  const mpg=parseFloat(document.getElementById('fo-mpg').value)||6.8;
+  const range=Math.round(gal*mpg);
+  document.getElementById('fo-gauge').style.width=val+'%';
+  document.getElementById('fo-level-label').textContent=`${val}% · ${gal} gal`;
+  document.getElementById('fo-level').value=val;
+  document.getElementById('fo-gauge-info').innerHTML=`
+    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span>Current fuel</span><span style="font-weight:600">${gal} gal</span></div>
+    <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span>Range available</span><span style="font-weight:600">${range} miles</span></div>
+    <div style="display:flex;justify-content:space-between;padding:5px 0"><span>Recommended fill-up by</span><span style="font-weight:600;color:var(--amber)">Mile ${Math.round(range*.65)}</span></div>`;
+}
+function planFuel(){
+  const orig=document.getElementById('fo-orig').value;
+  const dest=document.getElementById('fo-dest').value;
+  const tank=parseFloat(document.getElementById('fo-tank').value)||150;
+  const level=parseFloat(document.getElementById('fo-level').value)||65;
+  const mpg=parseFloat(document.getElementById('fo-mpg').value)||6.8;
+  const miles=920;
+  const startGal=tank*level/100;
+  const totalGal=miles/mpg;
+  const needToAdd=Math.max(0,totalGal-startGal+20);
+
+  const stops=[
+    {name:"Pilot Travel Center #1143",loc:"McAlester, OK",mile:180,price:3.72,gal:Math.round(needToAdd*.55),savings:true,brand:"Pilot"},
+    {name:"Love's Travel Stop #412",loc:"Joplin, MO",mile:490,price:3.85,gal:Math.round(needToAdd*.30),savings:false,brand:"Love's"},
+    {name:"Flying J #882",loc:"Springfield, IL",mile:750,price:3.79,gal:Math.round(needToAdd*.15),savings:true,brand:"Flying J"},
+  ].filter(s=>s.gal>5);
+
+  const totalCost=stops.reduce((sum,s)=>sum+s.price*s.gal,0);
+  const altCost=stops.reduce((sum,s)=>sum+3.92*s.gal,0);
+
+  document.getElementById('fo-stops-section').style.display='block';
+  document.getElementById('fo-stops-list').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--green-l);border-radius:8px;margin-bottom:1rem;font-size:13px">
+      <span style="font-size:20px">💡</span>
+      <div>Optimized plan for <strong>${orig} → ${dest}</strong>: ${stops.length} stop${stops.length>1?'s':''}, total <strong>$${totalCost.toFixed(2)}</strong> in fuel.
+      You save <strong style="color:var(--green)">$${(altCost-totalCost).toFixed(2)}</strong> vs unplanned fill-ups.</div>
+    </div>
+    ${stops.map((s,i)=>`
+    <div class="station-card ${s.savings?'best':''}">
+      <div class="station-num ${s.savings?'best':''}">${i+1}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:14px">${s.name} ${s.savings?'<span class="badge bg">Best Price</span>':''}</div>
+        <div style="font-size:12px;color:var(--ink3)">${s.loc} · Mile Marker ${s.mile}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:18px;font-weight:700;color:var(--amber)">$${s.price}/gal</div>
+        <div style="font-size:12px;color:var(--ink3)">${s.gal} gal · $${(s.price*s.gal).toFixed(2)}</div>
+      </div>
+    </div>`).join('')}`;
+}
+function renderNearby(){
+  const nearby=[
+    {name:"Pilot #2281",dist:"0.4 mi",price:3.79,network:"Pilot"},
+    {name:"Love's #892",dist:"1.1 mi",price:3.85,network:"Love's"},
+    {name:"TA Dallas",dist:"2.3 mi",price:3.91,network:"TA"},
+    {name:"QuikTrip #441",dist:"0.8 mi",price:3.96,network:"QT"},
+  ];
+  document.getElementById('fo-nearby').innerHTML=nearby.map((s,i)=>`
+    <div class="fuel-row">
+      <div class="fuel-ico">⛽</div>
+      <div style="flex:1">
+        <div style="font-weight:600;font-size:13px">${s.name} ${i===0?'<span class="badge bg">Nearest cheapest</span>':''}</div>
+        <div style="font-size:12px;color:var(--ink3)">${s.dist} away · ${s.network}</div>
+      </div>
+      <div style="font-size:17px;font-weight:700;color:var(--amber)">$${s.price}</div>
+    </div>`).join('');
+}
+function initFuelTrend(){
+  const ctx=document.getElementById('fuelTrendChart');
+  if(charts.fuelTrend) charts.fuelTrend.destroy();
+  charts.fuelTrend=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:['Apr 14','Apr 21','Apr 28','May 5','May 12','May 19','May 26','Jun 2'],
+      datasets:[
+        {label:'Diesel (national avg)',data:[3.91,3.89,3.85,3.88,3.86,3.82,3.84,3.84],borderColor:'#d97706',backgroundColor:'rgba(217,119,6,0.08)',tension:0.4,fill:true,pointRadius:3},
+        {label:'Your avg paid',data:[3.85,3.80,3.82,3.79,3.78,3.76,3.72,3.79],borderColor:'#15803d',backgroundColor:'rgba(21,128,61,0.05)',tension:0.4,fill:false,pointRadius:3,borderDash:[4,2]},
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{y:{min:3.6,max:4.0,ticks:{callback:v=>'$'+v.toFixed(2),font:{size:11}}}}}
+  });
+}
+function renderFuelLog(){
+  document.getElementById('fl-tbody').innerHTML=fuelLog.map(f=>`
+    <tr>
+      <td>${f.loc}</td>
+      <td>${f.gal} gal</td>
+      <td style="color:var(--amber);font-weight:600">$${f.price.toFixed(2)}</td>
+      <td style="font-weight:600">$${(f.gal*f.price).toFixed(2)}</td>
+      <td>${f.date}</td>
+    </tr>`).join('');
+}
+function logFuel(){
+  const loc=document.getElementById('fl-loc').value.trim();
+  const gal=parseFloat(document.getElementById('fl-gal').value);
+  const price=parseFloat(document.getElementById('fl-price').value);
+  if(!loc||!gal||!price){alert('Please fill in location, gallons, and price.');return;}
+  fuelLog.unshift({loc,gal,price,date:'Today'});
+  renderFuelLog();
+  document.getElementById('fl-loc').value='';
+  document.getElementById('fl-gal').value='';
+  document.getElementById('fl-price').value='';
+}
+
+// ══════════════════════════════════════════════════════
+// PROFITABILITY (RIGBOOK STYLE)
+// ══════════════════════════════════════════════════════
+let rbPeriodActive='week';
+function initProfitability(){
+  rbRender();
+  document.getElementById('rb-date').value=new Date().toISOString().split('T')[0];
+}
+function rbPeriod(p,el){
+  rbPeriodActive=p;
+  document.querySelectorAll('.rb-period-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  rbRender();
+}
+function rbRender(){
+  const loads=rbLoads;
+  const totalGross=loads.reduce((s,l)=>s+l.gross,0);
+  const totalFuel=loads.reduce((s,l)=>s+l.fuel,0);
+  const totalOther=loads.reduce((s,l)=>s+l.other,0);
+  const totalExp=totalFuel+totalOther;
+  const totalNet=totalGross-totalExp;
+  const totalMiles=loads.reduce((s,l)=>s+l.miles,0);
+  const avgRpm=totalGross/totalMiles;
+  const margin=totalNet/totalGross*100;
+
+  document.getElementById('rb-revenue').textContent='$'+totalGross.toLocaleString();
+  document.getElementById('rb-revenue-sub').textContent=loads.length+' loads this '+rbPeriodActive;
+  document.getElementById('rb-expenses').textContent='$'+totalExp.toLocaleString();
+  document.getElementById('rb-net').textContent=(totalNet>=0?'$':'-$')+Math.abs(totalNet).toLocaleString();
+  document.getElementById('rb-net').style.color=totalNet>=0?'var(--green)':'var(--red)';
+  document.getElementById('rb-margin').textContent='Margin: '+margin.toFixed(1)+'%';
+  document.getElementById('rb-rpm').textContent='$'+avgRpm.toFixed(2);
+
+  // Per-load table
+  document.getElementById('rb-load-tbody').innerHTML=loads.map((l,i)=>{
+    const net=l.gross-l.fuel-l.other;
+    const rpm=(l.gross/l.miles);
+    const score=Math.min(100,Math.round((rpm-1.5)/2.5*100));
+    return `<tr>
+      <td style="font-weight:700;color:var(--ink3)">${i+1}</td>
+      <td style="font-weight:600">${l.orig.split(',')[0]} → ${l.dest.split(',')[0]}</td>
+      <td>${l.miles.toLocaleString()}</td>
+      <td style="color:var(--green);font-weight:600">$${l.gross.toLocaleString()}</td>
+      <td style="color:var(--amber)">$${l.fuel}</td>
+      <td>$${l.other}</td>
+      <td style="font-weight:700;color:${net>=0?'var(--green)':'var(--red)'}">$${net.toLocaleString()}</td>
+      <td>$${rpm.toFixed(2)}</td>
+      <td><span style="font-weight:700;color:${score>=80?'var(--green)':score>=65?'var(--amber)':'var(--red)'}">${score}</span></td>
+    </tr>`;}).join('');
+
+  // Donut chart
+  const ctx=document.getElementById('rbDonutChart');
+  if(charts.rbDonut) charts.rbDonut.destroy();
+  charts.rbDonut=new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:['Net Profit','Fuel','Other Expenses'],
+      datasets:[{data:[totalNet,totalFuel,totalOther],backgroundColor:['#15803d','#d97706','#6b7280'],borderWidth:0,hoverOffset:4}]
+    },
+    options:{cutout:'72%',plugins:{legend:{display:false}},animation:{animateRotate:true}}
+  });
+  document.getElementById('rb-donut-label').textContent=margin.toFixed(1)+'%';
+
+  // Legend
+  document.getElementById('rb-legend').innerHTML=[
+    {label:'Net Profit',val:totalNet,c:'var(--green)'},
+    {label:'Fuel Cost',val:totalFuel,c:'var(--amber)'},
+    {label:'Other',val:totalOther,c:'var(--ink3)'},
+  ].map(l=>`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+    <div style="width:12px;height:12px;border-radius:3px;background:${l.c};flex-shrink:0"></div>
+    <span style="font-size:13px;flex:1">${l.label}</span>
+    <span style="font-size:13px;font-weight:700">$${l.val.toLocaleString()}</span>
+  </div>`).join('');
+
+  // Profit line chart
+  const ctxP=document.getElementById('rbProfitChart');
+  if(charts.rbProfit) charts.rbProfit.destroy();
+  const netByLoad=loads.map(l=>l.gross-l.fuel-l.other);
+  const labels=loads.map(l=>l.orig.split(',')[0].substring(0,3)+'→'+l.dest.split(',')[0].substring(0,3));
+  charts.rbProfit=new Chart(ctxP,{
+    type:'bar',
+    data:{labels,datasets:[{label:'Net Profit',data:netByLoad,backgroundColor:netByLoad.map(n=>n>=800?'rgba(21,128,61,0.7)':n>=400?'rgba(217,119,6,0.7)':'rgba(220,38,38,0.7)'),borderRadius:5}]},
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:11}}}}}
+  });
+
+  // Best/worst lanes
+  const sorted=[...loads].map(l=>({...l,net:l.gross-l.fuel-l.other,rpm:l.gross/l.miles})).sort((a,b)=>b.rpm-a.rpm);
+  document.getElementById('rb-best-lanes').innerHTML=sorted.slice(0,3).map(l=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1"><div style="font-weight:600;font-size:13px">${l.orig.split(',')[0]} → ${l.dest.split(',')[0]}</div><div style="font-size:11px;color:var(--ink3)">${l.miles} mi · ${l.date}</div></div>
+      <div style="text-align:right"><div style="font-weight:700;color:var(--green)">$${l.rpm.toFixed(2)}/mi</div><div style="font-size:11px;color:var(--ink3)">Net $${l.net.toLocaleString()}</div></div>
+    </div>`).join('');
+  document.getElementById('rb-worst-lanes').innerHTML=sorted.slice(-3).reverse().map(l=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1"><div style="font-weight:600;font-size:13px">${l.orig.split(',')[0]} → ${l.dest.split(',')[0]}</div><div style="font-size:11px;color:var(--ink3)">${l.miles} mi · ${l.date}</div></div>
+      <div style="text-align:right"><div style="font-weight:700;color:var(--amber)">$${l.rpm.toFixed(2)}/mi</div><div style="font-size:11px;color:var(--ink3)">Net $${l.net.toLocaleString()}</div></div>
+    </div>`).join('');
+}
+function showAddLoad(){
+  const f=document.getElementById('rb-add-form');
+  f.style.display=f.style.display==='none'?'block':'none';
+  if(f.style.display==='block') f.scrollIntoView({behavior:'smooth'});
+}
+function saveRbLoad(){
+  const orig=document.getElementById('rb-orig').value.trim();
+  const dest=document.getElementById('rb-dest').value.trim();
+  const miles=parseFloat(document.getElementById('rb-miles').value);
+  const gross=parseFloat(document.getElementById('rb-gross').value);
+  const fuel=parseFloat(document.getElementById('rb-fuel').value)||0;
+  const other=parseFloat(document.getElementById('rb-other').value)||0;
+  const date=document.getElementById('rb-date').value;
+  const broker=document.getElementById('rb-broker').value||'—';
+  if(!orig||!dest||!miles||!gross){document.getElementById('rb-save-confirm').textContent='Please fill in all required fields.';return;}
+  rbLoads.unshift({orig,dest,miles,gross,fuel,other,date:date||'Today',broker});
+  document.getElementById('rb-save-confirm').textContent=`✓ Load saved: ${orig.split(',')[0]} → ${dest.split(',')[0]}`;
+  rbRender();
+  ['rb-orig','rb-dest','rb-miles','rb-gross','rb-fuel','rb-other','rb-broker'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ══════════════════════════════════════════════════════
+// LANES
+// ══════════════════════════════════════════════════════
+function initLanes(){
+  document.getElementById('top-lanes').innerHTML=LANES.map(l=>`
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;font-weight:600">${l.lane}</span>
+        <span class="badge ${l.trend.includes('+')?'bg':'br'}">${l.trend}</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);margin:2px 0">Avg $${l.avg.toFixed(2)}/mi · Score: ${l.score}/100</div>
+      <div class="lane-bar"><div class="lane-fill" style="width:${l.score}%"></div></div>
+    </div>`).join('');
+  const ctx=document.getElementById('laneChart');
+  if(charts.lane) charts.lane.destroy();
+  charts.lane=new Chart(ctx,{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],datasets:[{label:'$/mile',data:[2.45,2.55,2.70,2.65,2.75,2.82,2.90,2.88],borderColor:'#d97706',backgroundColor:'rgba(217,119,6,0.1)',tension:0.4,fill:true,pointRadius:4}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{min:2.2,max:3.1,ticks:{callback:v=>'$'+v.toFixed(2),font:{size:11}}}}}});
+}
+function predictLane(){
+  const rpm=(2.40+Math.random()*.5).toFixed(2);
+  const demand=['Low','Medium','High','Very High'][Math.floor(Math.random()*4)];
+  const pct=(Math.random()*15+5).toFixed(0);
+  document.getElementById('lane-pred').innerHTML=`<div style="background:var(--amber-l);border-radius:8px;padding:1rem;border:1px solid var(--amber)"><div style="font-size:12px;color:var(--amber-d);margin-bottom:8px">Prediction: ${document.getElementById('p-orig').value} → ${document.getElementById('p-dest').value} · ${document.getElementById('p-month').value}</div><div style="display:flex;gap:1.5rem;flex-wrap:wrap"><div><div style="font-size:20px;font-weight:700;color:var(--amber-d)">$${rpm}/mi</div><div style="font-size:11px;color:var(--ink3)">Predicted rate</div></div><div><div style="font-size:20px;font-weight:700">${demand}</div><div style="font-size:11px;color:var(--ink3)">Demand</div></div><div><div style="font-size:20px;font-weight:700;color:var(--green)">+${pct}%</div><div style="font-size:11px;color:var(--ink3)">vs market avg</div></div></div></div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// ROUTES
+// ══════════════════════════════════════════════════════
+function optimizeRoute(){
+  const mpg=parseFloat(document.getElementById('rt-mpg').value)||6.8;
+  const miles=920,gal=Math.round(miles/mpg),cost=(gal*3.89).toFixed(2);
+  const sc=document.getElementById('rt-sum-card');sc.style.display='block';
+  document.getElementById('rt-sum').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem"><div><div style="font-size:11px;color:var(--ink3)">Distance</div><div style="font-size:17px;font-weight:700">${miles} mi</div></div><div><div style="font-size:11px;color:var(--ink3)">Drive Time</div><div style="font-size:17px;font-weight:700">14h 20m</div></div><div><div style="font-size:11px;color:var(--ink3)">Fuel Needed</div><div style="font-size:17px;font-weight:700">${gal} gal</div></div><div><div style="font-size:11px;color:var(--ink3)">Est. Fuel Cost</div><div style="font-size:17px;font-weight:700;color:var(--amber)">$${cost}</div></div></div><div style="margin-top:.75rem;padding:7px 10px;background:var(--green-l);border-radius:7px;font-size:12px;color:var(--green-d)">💡 Avoids I-44 construction — saves ~45 min</div>`;
+  document.getElementById('fuel-card').style.display='block';
+  document.getElementById('fuel-stops').innerHTML=[
+    {n:"Pilot Travel Center",loc:"McAlester, OK · Mile 180",p:"$3.72",best:true},
+    {n:"Love's Travel Stop",loc:"Joplin, MO · Mile 490",p:"$3.85",best:false},
+    {n:"Flying J",loc:"Springfield, IL · Mile 750",p:"$3.79",best:true},
+  ].map(s=>`<div class="fuel-row"><div class="fuel-ico">⛽</div><div style="flex:1"><div style="font-weight:600;font-size:13px">${s.n}${s.best?' <span class="badge bg">Best price</span>':''}</div><div style="font-size:12px;color:var(--ink3)">${s.loc}</div></div><div style="font-size:16px;font-weight:700;color:var(--amber)">${s.p}/gal</div></div>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// INVOICING
+// ══════════════════════════════════════════════════════
+function calcInv(){
+  const mi=parseFloat(document.getElementById('i-miles').value)||0;
+  const rpm=parseFloat(document.getElementById('i-rpm').value)||0;
+  const fsc=parseFloat(document.getElementById('i-fsc').value)||0;
+  const det=parseFloat(document.getElementById('i-det').value)||0;
+  const lh=(mi*rpm).toFixed(2);
+  const tot=(parseFloat(lh)+fsc+det).toFixed(2);
+  document.getElementById('inv-preview').innerHTML=`<div class="inv-box"><div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:1rem"><div><div style="font-size:17px;font-weight:700">RigCommand</div><div style="font-size:12px;color:var(--ink3)">Unit TX-4821</div></div><div style="text-align:right"><span class="badge ba">INVOICE</span><div style="font-size:12px;color:var(--ink3);margin-top:3px">${document.getElementById('i-num').value}</div></div></div><div style="font-size:12px;color:var(--ink3);margin-bottom:.75rem">To: <strong style="color:var(--ink)">${document.getElementById('i-broker').value}</strong><br>${document.getElementById('i-orig').value} → ${document.getElementById('i-dest').value}</div><div class="inv-line"><span>Line Haul (${mi} mi × $${rpm})</span><span>$${lh}</span></div><div class="inv-line"><span>Fuel Surcharge</span><span>$${fsc.toFixed(2)}</span></div><div class="inv-line"><span>Detention</span><span>$${det.toFixed(2)}</span></div><div class="inv-total"><span>Total Due</span><span>$${tot}</span></div><div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap"><button class="btn bp bsm" onclick="alert('Invoice sent!')">Send Invoice</button><button class="btn bo bsm" onclick="alert('PDF download triggered.')">Download PDF</button></div></div>`;
+}
+function invTab(id,el){
+  el.closest('.stabs').querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  document.getElementById('inv-create').style.display=id==='create'?'block':'none';
+  document.getElementById('inv-history').style.display=id==='history'?'block':'none';
+}
+function renderInvHist(){
+  document.getElementById('inv-tbody').innerHTML=INVHIST.map(i=>`<tr><td style="font-weight:600">${i.num}</td><td>${i.broker}</td><td>${i.lane}</td><td style="font-weight:600;color:var(--green)">${i.amt}</td><td><span class="badge ${i.status==='Paid'?'bg':'ba'}">${i.status}</span></td><td>${i.date}</td></tr>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// EXPENSES
+// ══════════════════════════════════════════════════════
+function renderExp(){
+  const cats=[{n:"Fuel",a:4810,c:"#d97706"},{n:"Maintenance",a:820,c:"#1d4ed8"},{n:"Tolls",a:340,c:"#15803d"},{n:"Food & Lodging",a:610,c:"#7c3aed"},{n:"Insurance",a:500,c:"#dc2626"},{n:"Other",a:340,c:"#888"}];
+  const tot=cats.reduce((s,c)=>s+c.a,0);
+  document.getElementById('exp-breakdown').innerHTML=cats.map(c=>`<div class="exp-row"><span class="exp-lbl">${c.n}</span><div class="exp-track"><div class="exp-fill" style="width:${Math.round(c.a/tot*100)}%;background:${c.c}"></div></div><span class="exp-amt">$${c.a.toLocaleString()}</span></div>`).join('');
+}
+function logExp(){
+  const a=document.getElementById('exp-amt').value;if(!a)return;
+  document.getElementById('exp-confirm').textContent=`✓ $${parseFloat(a).toFixed(2)} logged under ${document.getElementById('exp-cat').value}`;
+  document.getElementById('exp-amt').value='';document.getElementById('exp-note').value='';
+}
+
+// ══════════════════════════════════════════════════════
+// COMMS
+// ══════════════════════════════════════════════════════
+function renderComms(){
+  const el=document.getElementById('chat-msgs');
+  el.innerHTML=chatMsgs.map(m=>m.from==='in'
+    ?`<div><div class="msg-meta">${m.sender} · ${m.time}</div><div class="msg-bubble msg-in">${m.text}</div></div>`
+    :`<div><div class="msg-meta-out">${m.time}</div><div class="msg-bubble msg-out">${m.text}</div></div>`).join('');
+  el.scrollTop=el.scrollHeight;
+  document.getElementById('templates').innerHTML=TMPLS.map((t,i)=>`<div style="padding:9px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="useTpl(${i})"><div style="font-weight:600;font-size:13px;margin-bottom:2px">${t.title}</div><div style="font-size:12px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.body.substring(0,55)}...</div></div>`).join('');
+}
+function useTpl(i){document.getElementById('chat-in').value=TMPLS[i].body;}
+function sendMsg(){
+  const t=document.getElementById('chat-in').value.trim();if(!t)return;
+  chatMsgs.push({from:'out',text:t,time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+  document.getElementById('chat-in').value='';renderComms();
+}
+function aiDraft(){
+  const d=["Confirming pickup at 14:00 — will be at the gate 15 min early.","Running about 30 min ahead of schedule. Is the dock available for early delivery?","Following up on the rate con for load #TX-4821. Could you send that over?"];
+  document.getElementById('chat-in').value=d[Math.floor(Math.random()*d.length)];
+}
+
+// ══════════════════════════════════════════════════════
+// MAINTENANCE
+// ══════════════════════════════════════════════════════
+function renderMaint(){
+  document.getElementById('maint-sched').innerHTML=MAINT.map(m=>{
+    let pct=100,color='var(--green)';
+    if(m.interval){const rem=parseInt(m.next)-m.cur;pct=Math.max(0,Math.min(100,Math.round(rem/m.interval*100)));color=pct<30?'var(--red)':pct<50?'var(--amber)':'var(--green)';}
+    const nextFmt=m.interval?parseInt(m.next).toLocaleString()+' mi':m.next;
+    return `<div class="maint-row"><div style="font-size:20px;width:28px">${m.icon}</div><div style="flex:1"><div style="font-weight:600;font-size:13px">${m.name}</div><div style="font-size:11px;color:var(--ink3)">Last: ${m.last} · Next: ${nextFmt}</div>${m.interval?`<div style="height:5px;background:var(--surface3);border-radius:3px;margin-top:4px;overflow:hidden"><div style="width:${pct}%;height:100%;border-radius:3px;background:${color};transition:width .6s ease"></div></div>`:''}</div><span class="badge ${m.status==='due'?'br':m.status==='warning'?'ba':'bg'}">${m.status==='due'?'Due Now':m.status==='warning'?'Soon':'Good'}</span></div>`;}).join('');
+  document.getElementById('svc-hist').innerHTML=svcHist.map(s=>`<tr><td>${s.svc}</td><td>${s.date}</td><td>${s.mi}</td><td>${s.cost}</td><td style="color:var(--ink3)">${s.next}</td></tr>`).join('');
+}
+function logSvc(){
+  const mi=document.getElementById('svc-mi').value;if(!mi)return;
+  const type=document.getElementById('svc-type').value,cost=document.getElementById('svc-cost').value;
+  svcHist.unshift({svc:type,date:'Jun 5, 2026',mi:parseInt(mi).toLocaleString(),cost:cost?'$'+parseFloat(cost).toFixed(2):'—',next:'Per schedule'});
+  document.getElementById('svc-confirm').textContent=`✓ ${type} logged at ${parseInt(mi).toLocaleString()} mi`;
+  renderMaint();
+  ['svc-mi','svc-cost','svc-note'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ══════════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════════
+function initDash(){
+  // ── Derived data from rbLoads ──
+  const loads = rbLoads;
+  const totalGross = loads.reduce((s,l)=>s+l.gross,0);
+  const totalFuel  = loads.reduce((s,l)=>s+l.fuel,0);
+  const totalOther = loads.reduce((s,l)=>s+l.other,0);
+  const totalExp   = totalFuel+totalOther;
+  const totalNet   = totalGross-totalExp;
+  const totalMiles = loads.reduce((s,l)=>s+l.miles,0);
+  const margin     = (totalNet/totalGross*100).toFixed(1);
+
+  // Fixed cost model for break-even
+  const fixedMonthly = 3200; // insurance, truck payment, permits
+  const varPerMile   = 0.62; // fuel + tires + maintenance
+  const weeklyFixed  = fixedMonthly/4.33;
+  const weeklyMiles  = totalMiles;
+  const breakeven    = ((weeklyFixed/weeklyMiles)+varPerMile).toFixed(2);
+  const currentRpm   = (totalGross/totalMiles).toFixed(2);
+  const cushion      = (currentRpm-breakeven).toFixed(2);
+
+  // Top KPIs
+  document.getElementById('d-gross').textContent='$'+totalGross.toLocaleString();
+  document.getElementById('d-net').textContent='$'+totalNet.toLocaleString();
+  document.getElementById('d-margin').textContent=`Margin: ${margin}%`;
+  document.getElementById('d-breakeven').textContent='$'+breakeven+'/mi';
+
+  // ── Revenue vs Expenses bar chart ──
+  const ctx=document.getElementById('dashChart');
+  if(charts.dash) charts.dash.destroy();
+  charts.dash=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:loads.map(l=>l.orig.split(',')[0].slice(0,3)+'→'+l.dest.split(',')[0].slice(0,3)),
+      datasets:[
+        {label:'Revenue',data:loads.map(l=>l.gross),backgroundColor:'rgba(21,128,61,0.75)',borderRadius:4},
+        {label:'Expenses',data:loads.map(l=>l.fuel+l.other),backgroundColor:'rgba(217,119,6,0.6)',borderRadius:4},
+        {label:'Net',data:loads.map(l=>l.gross-l.fuel-l.other),backgroundColor:'rgba(29,78,216,0.5)',borderRadius:4},
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:11}}},x:{ticks:{font:{size:10}}}}}
+  });
+
+  // ── Break-even cost breakdown ──
+  document.getElementById('d-be-breakdown').innerHTML=[
+    {lbl:'Fixed costs/week',val:'$'+Math.round(weeklyFixed),c:'var(--red)'},
+    {lbl:'Variable cost/mi',val:'$'+varPerMile.toFixed(2),c:'var(--amber)'},
+    {lbl:'Your actual RPM',val:'$'+currentRpm+'/mi',c:'var(--green)'},
+    {lbl:'Profit cushion/mi',val:'+$'+cushion,c:'var(--green)'},
+  ].map(r=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--surface2);border-radius:6px;font-size:13px">
+    <span style="color:var(--ink3)">${r.lbl}</span>
+    <span style="font-weight:700;color:${r.c}">${r.val}</span>
+  </div>`).join('');
+
+  // ── Best & worst paying lanes ──
+  const laneMap={};
+  loads.forEach(l=>{
+    const key=l.orig.split(',')[0]+' → '+l.dest.split(',')[0];
+    if(!laneMap[key]) laneMap[key]={gross:0,net:0,miles:0,count:0};
+    laneMap[key].gross+=l.gross; laneMap[key].net+=l.gross-l.fuel-l.other;
+    laneMap[key].miles+=l.miles; laneMap[key].count++;
+  });
+  const laneArr=Object.entries(laneMap).map(([lane,d])=>({lane,rpm:(d.gross/d.miles),net:d.net,count:d.count,miles:d.miles}))
+    .sort((a,b)=>b.rpm-a.rpm);
+
+  // Supplement with LANES data for richer list
+  const allLanes=[...laneArr,...LANES.map(l=>({lane:l.lane,rpm:l.avg,net:Math.round(l.avg*680-980),count:1,miles:680,fromStatic:true}))];
+  const uniqueLanes=[];const seen=new Set();
+  allLanes.forEach(l=>{if(!seen.has(l.lane)){seen.add(l.lane);uniqueLanes.push(l);}});
+  const sortedLanes=uniqueLanes.sort((a,b)=>b.rpm-a.rpm);
+
+  const laneRow=(l,i,best)=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)${i===sortedLanes.length-1?';border:none':''}">
+      <div style="width:22px;height:22px;border-radius:50%;background:${best?'var(--green)':'var(--red)'};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">${i+1}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${l.lane}</div>
+        <div style="font-size:11px;color:var(--ink3)">${l.miles} mi avg · ${l.count} load${l.count>1?'s':''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-weight:700;color:${best?'var(--green)':'var(--red)'}">$${l.rpm.toFixed(2)}/mi</div>
+        <div style="font-size:11px;color:var(--ink3)">Net ~$${l.net.toLocaleString()}</div>
+      </div>
+    </div>`;
+
+  document.getElementById('d-best-lanes').innerHTML=sortedLanes.slice(0,4).map((l,i)=>laneRow(l,i,true)).join('');
+  document.getElementById('d-worst-lanes').innerHTML=[...sortedLanes].reverse().slice(0,4).map((l,i)=>laneRow(l,i,false)).join('');
+
+  // ── Profit per load chart ──
+  const ctxPL=document.getElementById('profitPerLoadChart');
+  if(charts.ppl) charts.ppl.destroy();
+  const plData=loads.map(l=>({label:l.orig.split(',')[0].slice(0,3)+'→'+l.dest.split(',')[0].slice(0,3),net:l.gross-l.fuel-l.other,rpm:l.gross/l.miles}));
+  charts.ppl=new Chart(ctxPL,{
+    type:'bar',
+    data:{
+      labels:plData.map(d=>d.label),
+      datasets:[{
+        label:'Net Profit',
+        data:plData.map(d=>d.net),
+        backgroundColor:plData.map(d=>d.net>1000?'rgba(21,128,61,0.75)':d.net>500?'rgba(217,119,6,0.7)':'rgba(220,38,38,0.7)'),
+        borderRadius:5
+      }]
+    },
+    options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:11}}},x:{ticks:{font:{size:10}}}}}
+  });
+
+  // ── Profit per customer ──
+  const custMap={};
+  loads.forEach(l=>{
+    const b=l.broker||'Unknown';
+    if(!custMap[b]) custMap[b]={gross:0,net:0,loads:0};
+    custMap[b].gross+=l.gross; custMap[b].net+=l.gross-l.fuel-l.other; custMap[b].loads++;
+  });
+  const custArr=Object.entries(custMap).map(([b,d])=>({broker:b,...d})).sort((a,b)=>b.net-a.net);
+  const maxCustNet=custArr[0]?.net||1;
+  document.getElementById('d-profit-customer').innerHTML=custArr.map(c=>`
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+        <span style="font-size:13px;font-weight:600">${c.broker}</span>
+        <span style="font-size:13px;font-weight:700;color:var(--green)">$${c.net.toLocaleString()}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="flex:1;height:8px;background:var(--surface3);border-radius:4px;overflow:hidden">
+          <div style="width:${Math.round(c.net/maxCustNet*100)}%;height:100%;border-radius:4px;background:var(--green);transition:width .6s ease"></div>
+        </div>
+        <span style="font-size:11px;color:var(--ink3);white-space:nowrap">${c.loads} load${c.loads>1?'s':''} · $${(c.gross/c.loads).toFixed(0)}/load avg</span>
+      </div>
+    </div>`).join('');
+
+  // ── Profit per truck ──
+  const weeklyNet=totalNet, monthlyNet=totalNet*4.33, yearlyNet=totalNet*52;
+  const truckAge='2021 (5 yrs)', truckVal=68000, deprMonth=1100;
+  document.getElementById('d-profit-truck').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem">
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:11px;color:var(--ink3)">This Week</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)">$${weeklyNet.toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--ink3)">Net after all costs</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:11px;color:var(--ink3)">Monthly Est.</div>
+        <div style="font-size:20px;font-weight:700;color:var(--green)">$${Math.round(monthlyNet).toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--ink3)">×4.33 weeks</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:11px;color:var(--ink3)">Annual Run Rate</div>
+        <div style="font-size:20px;font-weight:700;color:var(--amber)">$${Math.round(yearlyNet).toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--ink3)">At current pace</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:10px">
+        <div style="font-size:11px;color:var(--ink3)">Truck Depreciation</div>
+        <div style="font-size:20px;font-weight:700;color:var(--red)">-$${deprMonth.toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--ink3)">/month · ${truckAge}</div>
+      </div>
+    </div>
+    <div style="padding:10px;background:var(--green-l);border-radius:8px;font-size:13px;color:var(--green-d)">
+      💡 After depreciation, true monthly profit is <strong>$${Math.round(monthlyNet-deprMonth).toLocaleString()}</strong> — annual <strong>$${Math.round((monthlyNet-deprMonth)*12).toLocaleString()}</strong>
+    </div>`;
+
+  // ── Fuel efficiency trend chart ──
+  const ctxFE=document.getElementById('fuelEffChart');
+  if(charts.fuelEff) charts.fuelEff.destroy();
+  const mpgData=[6.2,6.4,6.3,6.5,6.6,6.7,6.5,6.8];
+  charts.fuelEff=new Chart(ctxFE,{
+    type:'line',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','May W2','May W3','Jun'],
+      datasets:[
+        {label:'MPG',data:mpgData,borderColor:'#d97706',backgroundColor:'rgba(217,119,6,0.1)',tension:0.4,fill:true,pointRadius:4,borderWidth:2},
+        {label:'Target (7.0)',data:Array(8).fill(7.0),borderColor:'rgba(21,128,61,0.4)',borderDash:[5,4],pointRadius:0,borderWidth:1.5}
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{labels:{font:{size:11}}}},scales:{y:{min:5.8,max:7.5,ticks:{callback:v=>v.toFixed(1)+' mpg',font:{size:11}}}}}
+  });
+
+  // ── Recommended loads ──
+  const beRate=parseFloat(breakeven);
+  const recommended=LOADS.filter(l=>l.rpm>beRate).sort((a,b)=>{
+    const netA=(a.rate-(a.miles/6.8*3.84)-(a.miles*0.18));
+    const netB=(b.rate-(b.miles/6.8*3.84)-(b.miles*0.18));
+    return netB-netA;
+  });
+  document.getElementById('d-recommended').innerHTML=recommended.map((l,i)=>{
+    const estFuel=l.miles/6.8*3.84;
+    const estNet=l.rate-estFuel-(l.miles*0.26);
+    const margin=((estNet/l.rate)*100).toFixed(0);
+    const cushionRpm=(l.rpm-beRate).toFixed(2);
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;border:1px solid var(--border);margin-bottom:.5rem;background:${i===0?'var(--green-l)':'var(--surface)'}">
+      <div style="width:28px;height:28px;border-radius:50%;background:${i===0?'var(--green)':'var(--surface3)'};color:${i===0?'#fff':'var(--ink)'};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${i+1}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13px">${l.from} → ${l.to}</div>
+        <div style="font-size:11px;color:var(--ink3)">${l.miles} mi · ${l.type} · ${l.pickup}</div>
+        <div style="font-size:11px;margin-top:2px"><span class="badge bg">+$${cushionRpm}/mi cushion</span> <span class="badge ba">${margin}% margin</span></div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:17px;font-weight:700;color:var(--green)">$${l.rate.toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--ink3)">~$${Math.round(estNet).toLocaleString()} net</div>
+      </div>
+    </div>`;
+  }).join('') || '<div style="color:var(--ink3);font-size:13px;padding:1rem 0">No loads currently above break-even threshold.</div>';
+
+  // ── Action items ──
+  document.getElementById('action-items').innerHTML=`
+    <div class="action-item" style="background:var(--amber-l)"><span>⚠️</span><div><div style="font-size:13px;font-weight:600;color:var(--amber-d)">Oil change due in 2,100 mi</div><div style="font-size:11px;color:var(--ink3)">Schedule at next truck stop</div></div></div>
+    <div class="action-item" style="background:var(--blue-l)"><span>💬</span><div><div style="font-size:13px;font-weight:600;color:var(--blue-d)">Invoice INV-086 processing</div><div style="font-size:11px;color:var(--ink3)">Expected payment June 8</div></div></div>
+    <div class="action-item" style="background:var(--green-l)"><span>📦</span><div><div style="font-size:13px;font-weight:600;color:var(--green-d)">${recommended.length} loads above break-even now</div><div style="font-size:11px;color:var(--ink3)">Best: ${recommended[0]?.from||'—'} → ${recommended[0]?.to||'—'} @ $${recommended[0]?.rpm.toFixed(2)||'—'}/mi</div></div></div>
+    <div class="action-item" style="background:var(--purple-l)"><span>📈</span><div><div style="font-size:13px;font-weight:600;color:var(--purple-d)">MPG trending up +0.3 pts</div><div style="font-size:11px;color:var(--ink3)">Saving ~$28/week vs January</div></div></div>`;
+}
+
+// ══════════════════════════════════════════════════════
+// PWA
+// ══════════════════════════════════════════════════════
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  document.getElementById('install-banner').style.display='flex';
+});
+function installApp(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;document.getElementById('install-banner').style.display='none';});}
+  else{alert('To install on iPhone:\n1. Tap Share (box+arrow)\n2. "Add to Home Screen"\n3. Tap Add\n\nAndroid: 3-dot menu → "Add to Home Screen"');}
+}
+window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').style.display='none';});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+
+// ── INIT ──
+renderNav();
+renderBottomNav();
+show(tabOrder[0]?.id || 'loads', null);
+calcInv();
+renderExp();
+document.getElementById('exp-date').value=new Date().toISOString().split('T')[0];
+</script>
+<!-- Toast notification container -->
+<div id="toast-container"></div>
+<!-- Scroll-to-top FAB -->
+<button class="fab-top" id="fab-top" onclick="document.querySelector('.main').scrollTo({top:0,behavior:'smooth'})" aria-label="Scroll to top">↑</button>
+
+<script>
+// ══════════════════════════════════════════════════════
+// UI SYSTEM — Toast, Theme, Search, Scroll-aware topbar,
+// Skeleton loaders, KPI sparklines, Empty states,
+// Micro-interactions, Input validation
+// ══════════════════════════════════════════════════════
+
+// ── Theme toggle (dark/light/system) ──────────────────
+let currentTheme = localStorage.getItem('rc_theme') || 'auto';
+function applyTheme(){
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-btn');
+  if(currentTheme==='dark'){root.setAttribute('data-theme','dark');if(btn)btn.textContent='☀️';}
+  else if(currentTheme==='light'){root.setAttribute('data-theme','light');if(btn)btn.textContent='🌙';}
+  else{root.removeAttribute('data-theme');if(btn)btn.textContent=window.matchMedia('(prefers-color-scheme:dark)').matches?'☀️':'🌙';}
+}
+function toggleTheme(){
+  currentTheme = currentTheme==='auto'?'dark':currentTheme==='dark'?'light':'auto';
+  localStorage.setItem('rc_theme',currentTheme);
+  applyTheme();
+  showToast('Theme changed',currentTheme==='dark'?'Dark mode on 🌙':currentTheme==='light'?'Light mode on ☀️':'Following system default','info',2000);
+}
+applyTheme();
+
+// ── Toast notification system ──────────────────────────
+let toastCount = 0;
+function showToast(title, msg='', type='success', duration=3500){
+  const container = document.getElementById('toast-container');
+  if(!container) return;
+  const id = 'toast-'+(++toastCount);
+  const icons = {success:'✅',error:'❌',warning:'⚠️',info:'ℹ️'};
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.id = id;
+  t.innerHTML = `
+    <div class="toast-icon">${icons[type]||'ℹ️'}</div>
+    <div class="toast-body">
+      <div class="toast-title">${title}</div>
+      ${msg?`<div class="toast-msg">${msg}</div>`:''}
+    </div>
+    <div class="toast-close" onclick="dismissToast('${id}')">✕</div>
+    <div class="toast-progress" style="animation-duration:${duration}ms"></div>
+  `;
+  t.style.position='relative';
+  t.style.overflow='hidden';
+  t.onclick = () => dismissToast(id);
+  container.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>dismissToast(id), duration);
+}
+function dismissToast(id){
+  const t = document.getElementById(id);
+  if(!t) return;
+  t.classList.remove('show');
+  t.classList.add('hide');
+  setTimeout(()=>t?.remove(), 300);
+}
+
+// ── Scroll-aware topbar (compact on scroll down) ───────
+const mainEl = document.querySelector('.main');
+const topbarEl = document.getElementById('topbar');
+const fabEl = document.getElementById('fab-top');
+let lastScrollTop = 0;
+if(mainEl){
+  mainEl.addEventListener('scroll',()=>{
+    const st = mainEl.scrollTop;
+    if(topbarEl) topbarEl.classList.toggle('compact', st > 60 && st > lastScrollTop);
+    if(fabEl) fabEl.classList.toggle('visible', st > 300);
+    lastScrollTop = st;
+  }, {passive:true});
+}
+
+// ── Skeleton loader helpers ────────────────────────────
+function showSkeleton(containerId, rows=3){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = Array(rows).fill(0).map((_,i)=>`
+    <div class="skeleton skel-card" style="height:${i===0?70:56}px;margin-bottom:.6rem"></div>`).join('');
+}
+function showSkeletonKPIs(containerId, count=4){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+  el.innerHTML = `<div class="g4">${Array(count).fill(`<div class="skeleton skel-kpi"></div>`).join('')}</div>`;
+}
+
+// ── Global search ──────────────────────────────────────
+const SEARCH_INDEX = [
+  {label:'📦 Find Loads',tab:'loads'},{label:'🤖 AI Load Evaluator',tab:'aieval'},
+  {label:'⛽ Fuel Optimization',tab:'fuelopt'},{label:'📒 Profitability Tracker',tab:'profitability'},
+  {label:'📈 Lane Intelligence',tab:'lanes'},{label:'🗺️ Route Optimizer',tab:'routes'},
+  {label:'🧾 Invoicing',tab:'invoicing'},{label:'💰 Expense Tracker',tab:'expenses'},
+  {label:'💬 Communications',tab:'comms'},{label:'🔧 Maintenance',tab:'maintenance'},
+  {label:'📊 Dashboard',tab:'dashboard'},
+];
+let searchResults = null;
+function globalSearch(q){
+  if(!q.trim()){ hideSearchResults(); return; }
+  const matches = SEARCH_INDEX.filter(s=>s.label.toLowerCase().includes(q.toLowerCase())).slice(0,5);
+  let el = document.getElementById('global-search-results');
+  if(!el){
+    el = document.createElement('div');
+    el.id='global-search-results';
+    el.style.cssText='position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1.5px solid var(--border2);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);z-index:1000;overflow:hidden';
+    document.querySelector('.global-search-wrap').appendChild(el);
+  }
+  if(!matches.length){el.innerHTML='<div style="padding:10px 12px;font-size:13px;color:var(--ink3)">No results</div>';return;}
+  el.innerHTML = matches.map(m=>`
+    <div onclick="navigateSearch('${m.tab}')" style="padding:10px 14px;font-size:13px;cursor:pointer;transition:background var(--t-fast)" onmouseover="this.style.background='var(--amber-l)'" onmouseout="this.style.background=''">
+      ${m.label}
+    </div>`).join('<div style="height:1px;background:var(--border)"></div>');
+}
+function navigateSearch(tab){
+  hideSearchResults();
+  document.getElementById('global-search').value='';
+  const btn = document.querySelector(`#nav-bar [data-id="${tab}"]`);
+  if(btn) show(tab,btn);
+}
+function hideSearchResults(){
+  document.getElementById('global-search-results')?.remove();
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.global-search-wrap')) hideSearchResults();
+});
+
+// ── KPI sparkline helpers ──────────────────────────────
+function drawSparkline(canvas, data, color){
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const w = canvas.width, h = canvas.height;
+  const min = Math.min(...data), max = Math.max(...data), range = max-min||1;
+  ctx.clearRect(0,0,w,h);
+  ctx.beginPath();
+  data.forEach((v,i)=>{
+    const x = (i/(data.length-1))*w;
+    const y = h-(((v-min)/range)*(h-4)+2);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle=color||'currentColor';
+  ctx.lineWidth=2;
+  ctx.stroke();
+}
+
+// ── Micro-interaction: button ripple ──────────────────
+document.addEventListener('click',e=>{
+  const btn = e.target.closest('.btn');
+  if(!btn) return;
+  const r = document.createElement('span');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width,rect.height);
+  r.style.cssText=`position:absolute;width:${size}px;height:${size}px;border-radius:50%;background:rgba(255,255,255,0.3);transform:translate(-50%,-50%) scale(0);animation:ripple .4s ease-out forwards;left:${e.clientX-rect.left}px;top:${e.clientY-rect.top}px;pointer-events:none`;
+  if(getComputedStyle(btn).position==='static') btn.style.position='relative';
+  btn.style.overflow='hidden';
+  btn.appendChild(r);
+  setTimeout(()=>r.remove(),400);
+},{passive:true});
+// Ripple keyframe
+const rippleStyle=document.createElement('style');
+rippleStyle.textContent='@keyframes ripple{to{transform:translate(-50%,-50%) scale(2.5);opacity:0}}';
+document.head.appendChild(rippleStyle);
+
+// ── Input validation helpers ───────────────────────────
+function validateInput(input, rules={}){
+  const val = input.value.trim();
+  let error = '';
+  if(rules.required && !val) error=`${rules.label||'This field'} is required`;
+  else if(rules.min && parseFloat(val)<rules.min) error=`Must be at least ${rules.min}`;
+  else if(rules.max && parseFloat(val)>rules.max) error=`Must be at most ${rules.max}`;
+  input.classList.toggle('valid', !error && !!val);
+  input.classList.toggle('error', !!error);
+  const errEl = input.nextElementSibling;
+  if(errEl?.classList.contains('field-error')){errEl.textContent=error;errEl.classList.toggle('show',!!error);}
+  return !error;
+}
+
+// ── Notification dots on tabs with alerts ─────────────
+function setTabNotif(tabId, show){
+  // Top nav dot
+  const btn = document.querySelector(`#nav-bar [data-id="${tabId}"]`);
+  if(btn){
+    const existing = btn.querySelector('.notif');
+    if(show && !existing){ const dot=document.createElement('span');dot.className='notif';btn.appendChild(dot);}
+    else if(!show && existing){ existing.remove(); }
+  }
+  // Bottom nav dot
+  const bnDot = document.getElementById(`bn-notif-${tabId}`);
+  if(bnDot) bnDot.classList.toggle('show', show);
+}
+
+// ── Update header KPIs from live data ─────────────────
+function updateHeaderKPIs(){
+  try {
+    const gross = rbLoads.reduce((s,l)=>s+l.gross,0);
+    const miles = rbLoads.reduce((s,l)=>s+l.miles,0);
+    const rpm = miles>0?(gross/miles).toFixed(2):'—';
+    document.getElementById('hdr-revenue').textContent='$'+gross.toLocaleString();
+    document.getElementById('hdr-rpm').textContent='$'+rpm+'/mi';
+  } catch(e){}
+}
+
+// Set maintenance alert dot on load
+setTimeout(()=>{
+  setTabNotif('maintenance',true);
+  setTabNotif('dashboard',false);
+  updateHeaderKPIs();
+},100);
+
+// ── Wrap key actions with toast feedback ───────────────
+// Patch logExp to show toast
+const _origLogExp = typeof logExp==='function'?logExp:null;
+if(_origLogExp) window.logExp = function(){
+  const a=document.getElementById('exp-amt')?.value;
+  if(!a){showToast('Missing amount','Please enter an expense amount.','warning');return;}
+  _origLogExp();
+  showToast('Expense logged','$'+parseFloat(a).toFixed(2)+' added to '+document.getElementById('exp-cat')?.value,'success');
+};
+
+// Patch logSvc to show toast
+const _origLogSvc = typeof logSvc==='function'?logSvc:null;
+if(_origLogSvc) window.logSvc = function(){
+  const mi=document.getElementById('svc-mi')?.value;
+  if(!mi){showToast('Missing mileage','Please enter current mileage.','warning');return;}
+  _origLogSvc();
+  showToast('Service logged',document.getElementById('svc-type')?.value+' at '+parseInt(mi).toLocaleString()+' mi','success');
+  setTabNotif('maintenance',false);
+};
+
+// Patch logFuel to show toast
+const _origLogFuel = typeof logFuel==='function'?logFuel:null;
+if(_origLogFuel) window.logFuel = function(){
+  const gal=document.getElementById('fl-gal')?.value;
+  const price=document.getElementById('fl-price')?.value;
+  if(!gal||!price){showToast('Missing info','Please fill in gallons and price.','warning');return;}
+  _origLogFuel();
+  showToast('Fill-up logged','$'+(parseFloat(gal)*parseFloat(price)).toFixed(2)+' · '+gal+' gal at $'+parseFloat(price).toFixed(2)+'/gal','success');
+  updateHeaderKPIs();
+};
+
+// Patch saveRbLoad to show toast + update header
+const _origSaveRb = typeof saveRbLoad==='function'?saveRbLoad:null;
+if(_origSaveRb) window.saveRbLoad = function(){
+  const orig=document.getElementById('rb-orig')?.value.trim();
+  if(!orig){showToast('Missing origin','Please fill in all required fields.','warning');return;}
+  _origSaveRb();
+  showToast('Load saved','Added to your profitability ledger','success');
+  updateHeaderKPIs();
+};
+
+// Show welcome toast on first load
+if(!localStorage.getItem('rc_welcomed')){
+  setTimeout(()=>{
+    showToast('Welcome to RigCommand 🚛','Drag tabs to reorder. Tap 🌙 to toggle dark mode.','info',5000);
+    localStorage.setItem('rc_welcomed','1');
+  },800);
+}
+
+// ══════════════════════════════════════════════════════
+// ACCOUNTING — P&L, Tax, IFTA, CSV Import/Export
+// ══════════════════════════════════════════════════════
+
+// ── Sample transaction data ────────────────────────────
+let acctTransactions = [
+  // Income
+  {date:'2026-06-05',desc:'Load: Dallas→Chicago · Coyote Logistics',cat:'Income',type:'income',amt:2622},
+  {date:'2026-06-03',desc:'Load: Houston→Nashville · Echo Global',cat:'Income',type:'income',amt:2356},
+  {date:'2026-06-01',desc:'Load: FTW→Kansas City · XPO Logistics',cat:'Income',type:'income',amt:1836},
+  {date:'2026-05-29',desc:'Load: Dallas→Denver · TQL',cat:'Income',type:'income',amt:2184},
+  {date:'2026-05-27',desc:'Load: San Antonio→Memphis · CH Robinson',cat:'Income',type:'income',amt:1550},
+  {date:'2026-05-22',desc:'Load: Dallas→Chicago · Coyote Logistics',cat:'Income',type:'income',amt:2580},
+  {date:'2026-05-18',desc:'Load: Houston→Atlanta · Echo Global',cat:'Income',type:'income',amt:2100},
+  {date:'2026-05-14',desc:'Load: FTW→Indianapolis · TQL',cat:'Income',type:'income',amt:1920},
+  {date:'2026-05-09',desc:'Load: Dallas→Memphis · CH Robinson',cat:'Income',type:'income',amt:1260},
+  {date:'2026-05-05',desc:'Load: San Antonio→Chicago · XPO Logistics',cat:'Income',type:'income',amt:2750},
+  {date:'2026-04-28',desc:'Load: Dallas→Nashville · Coyote Logistics',cat:'Income',type:'income',amt:1840},
+  {date:'2026-04-22',desc:'Load: Houston→Kansas City · TQL',cat:'Income',type:'income',amt:2010},
+  // Fuel
+  {date:'2026-06-05',desc:'Pilot Travel Center — McAlester, OK',cat:'Fuel',type:'expense',amt:354},
+  {date:'2026-06-05',desc:'Flying J — Springfield, IL',cat:'Fuel',type:'expense',amt:333},
+  {date:'2026-06-03',desc:'Love\'s Travel Stop — Joplin, MO',cat:'Fuel',type:'expense',amt:392},
+  {date:'2026-06-01',desc:'Pilot Travel Center — Oklahoma City, OK',cat:'Fuel',type:'expense',amt:310},
+  {date:'2026-05-29',desc:'Flying J — Amarillo, TX',cat:'Fuel',type:'expense',amt:388},
+  {date:'2026-05-27',desc:'Pilot — Dallas, TX',cat:'Fuel',type:'expense',amt:297},
+  {date:'2026-05-22',desc:'Love\'s — Joplin, MO',cat:'Fuel',type:'expense',amt:345},
+  {date:'2026-05-18',desc:'Pilot — Birmingham, AL',cat:'Fuel',type:'expense',amt:368},
+  {date:'2026-05-14',desc:'Flying J — Indianapolis, IN',cat:'Fuel',type:'expense',amt:290},
+  {date:'2026-05-09',desc:'TA Petro — Memphis, TN',cat:'Fuel',type:'expense',amt:315},
+  // Maintenance
+  {date:'2026-05-12',desc:'Oil Change + Filter — Speedco Dallas',cat:'Maintenance',type:'expense',amt:180},
+  {date:'2026-04-20',desc:'Tire Rotation — Loves Truck Care',cat:'Maintenance',type:'expense',amt:95},
+  {date:'2026-04-10',desc:'Brake Inspection — TA Petro',cat:'Maintenance',type:'expense',amt:340},
+  {date:'2026-03-15',desc:'DEF Fluid + Air Filter',cat:'Maintenance',type:'expense',amt:68},
+  // Insurance
+  {date:'2026-06-01',desc:'Progressive Commercial — Monthly Premium',cat:'Insurance',type:'expense',amt:620},
+  {date:'2026-05-01',desc:'Progressive Commercial — Monthly Premium',cat:'Insurance',type:'expense',amt:620},
+  {date:'2026-04-01',desc:'Progressive Commercial — Monthly Premium',cat:'Insurance',type:'expense',amt:620},
+  // Permits & Licenses
+  {date:'2026-04-15',desc:'IFTA Quarterly Filing Fee',cat:'Permits & Licenses',type:'expense',amt:55},
+  {date:'2026-01-10',desc:'Annual Operating Authority Renewal',cat:'Permits & Licenses',type:'expense',amt:300},
+  {date:'2026-01-05',desc:'Oversize/Overweight Permit — TX',cat:'Permits & Licenses',type:'expense',amt:120},
+  // Tolls
+  {date:'2026-06-05',desc:'I-88 Illinois Tollway',cat:'Tolls',type:'expense',amt:18},
+  {date:'2026-06-03',desc:'Kansas Turnpike',cat:'Tolls',type:'expense',amt:12},
+  {date:'2026-05-29',desc:'Oklahoma Turnpike',cat:'Tolls',type:'expense',amt:22},
+  {date:'2026-05-22',desc:'I-355 Illinois Tollway',cat:'Tolls',type:'expense',amt:15},
+  // Meals
+  {date:'2026-06-05',desc:'Pilot Flying J Restaurant',cat:'Meals',type:'expense',amt:18},
+  {date:'2026-06-03',desc:'Love\'s Diner — Joplin',cat:'Meals',type:'expense',amt:14},
+  {date:'2026-05-29',desc:'Flying J Restaurant — Amarillo',cat:'Meals',type:'expense',amt:22},
+  {date:'2026-05-27',desc:'TA Country Pride — Dallas',cat:'Meals',type:'expense',amt:16},
+  // Communications
+  {date:'2026-06-01',desc:'Verizon — Phone Plan',cat:'Communications',type:'expense',amt:85},
+  {date:'2026-05-01',desc:'Verizon — Phone Plan',cat:'Communications',type:'expense',amt:85},
+  // Office
+  {date:'2026-06-01',desc:'RigCommand Pro Subscription',cat:'Office & Admin',type:'expense',amt:49},
+  {date:'2026-05-01',desc:'RigCommand Pro Subscription',cat:'Office & Admin',type:'expense',amt:49},
+];
+
+// IFTA fuel purchase data (state + gallons)
+let iftaData = [
+  {state:'TX', miles:480,  gal:70,  rate:0.200},
+  {state:'OK', miles:310,  gal:46,  rate:0.190},
+  {state:'KS', miles:220,  gal:32,  rate:0.240},
+  {state:'MO', miles:280,  gal:41,  rate:0.170},
+  {state:'IL', miles:280,  gal:41,  rate:0.455},
+  {state:'TN', miles:190,  gal:28,  rate:0.270},
+  {state:'CO', miles:420,  gal:62,  rate:0.205},
+  {state:'AL', miles:180,  gal:26,  rate:0.280},
+];
+
+let acctPeriodActive = 'month';
+let acctVisibleCount = 15;
+let acctFilteredTxns = [];
+const acctCharts = {};
+
+// ── Period filter ──────────────────────────────────────
+function acctPeriod(p, el){
+  acctPeriodActive = p;
+  document.querySelectorAll('.rb-period-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  initAccounting();
+}
+
+function acctFilterByPeriod(txns){
+  const now = new Date('2026-06-08');
+  return txns.filter(t=>{
+    const d = new Date(t.date);
+    if(acctPeriodActive==='month') return d.getMonth()===5 && d.getFullYear()===2026;
+    if(acctPeriodActive==='quarter') return d.getMonth()>=3 && d.getMonth()<=5 && d.getFullYear()===2026;
+    if(acctPeriodActive==='ytd') return d.getFullYear()===2026;
+    return true; // full year
+  });
+}
+
+// ── Main init ──────────────────────────────────────────
+function initAccounting(){
+  document.getElementById('txn-date').value = new Date().toISOString().split('T')[0];
+  acctVisibleCount = 15;
+
+  const filtered = acctFilterByPeriod(acctTransactions);
+  const income  = filtered.filter(t=>t.type==='income').reduce((s,t)=>s+t.amt,0);
+  const expense = filtered.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amt,0);
+  const net     = income - expense;
+  const margin  = income>0 ? (net/income*100).toFixed(1) : '0.0';
+  const loads   = filtered.filter(t=>t.cat==='Income').length;
+
+  // KPI cards
+  document.getElementById('acct-kpis').innerHTML = `
+    <div class="kpi-card good">
+      <div class="kpi-label">Gross Revenue</div>
+      <div class="kpi-value" style="color:var(--green)">$${income.toLocaleString()}</div>
+      <div class="kpi-sub">${loads} loads · ${acctPeriodLabel()}</div>
+    </div>
+    <div class="kpi-card bad">
+      <div class="kpi-label">Total Expenses</div>
+      <div class="kpi-value" style="color:var(--red)">$${expense.toLocaleString()}</div>
+      <div class="kpi-sub">All categories</div>
+    </div>
+    <div class="kpi-card ${net>=0?'good':'bad'}">
+      <div class="kpi-label">Net Profit</div>
+      <div class="kpi-value" style="color:${net>=0?'var(--green)':'var(--red)'}">$${Math.abs(net).toLocaleString()}</div>
+      <div class="kpi-sub">Margin: ${margin}%</div>
+    </div>
+    <div class="kpi-card info">
+      <div class="kpi-label">Avg per Load</div>
+      <div class="kpi-value" style="color:var(--blue)">$${loads>0?Math.round(net/loads).toLocaleString():'—'}</div>
+      <div class="kpi-sub">Net profit / load</div>
+    </div>`;
+
+  renderPLChart(filtered);
+  renderDonutChart(filtered);
+  renderTaxSummary(income, expense, net);
+  renderIFTA();
+  filterTransactions('');
+}
+
+function acctPeriodLabel(){
+  if(acctPeriodActive==='month') return 'June 2026';
+  if(acctPeriodActive==='quarter') return 'Q2 2026';
+  if(acctPeriodActive==='ytd') return 'Jan–Jun 2026';
+  return '2026';
+}
+
+// ── P&L Chart ──────────────────────────────────────────
+function renderPLChart(filtered){
+  const ctx = document.getElementById('acctPLChart');
+  if(acctCharts.pl) acctCharts.pl.destroy();
+
+  // Group by month
+  const months = {};
+  filtered.forEach(t=>{
+    const m = t.date.substring(0,7);
+    if(!months[m]) months[m]={income:0,expense:0};
+    if(t.type==='income') months[m].income+=t.amt;
+    else months[m].expense+=t.amt;
+  });
+
+  const labels = Object.keys(months).sort().map(m=>{
+    const [y,mo]=m.split('-');
+    return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][parseInt(mo)-1]+' '+y.slice(2);
+  });
+  const incomeData  = Object.keys(months).sort().map(m=>months[m].income);
+  const expenseData = Object.keys(months).sort().map(m=>months[m].expense);
+  const netData     = incomeData.map((v,i)=>v-expenseData[i]);
+
+  acctCharts.pl = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'Income',   data:incomeData,  backgroundColor:'rgba(22,163,74,0.7)', borderRadius:4},
+        {label:'Expenses', data:expenseData, backgroundColor:'rgba(220,38,38,0.55)', borderRadius:4},
+        {label:'Net',      data:netData,     type:'line', borderColor:'#d97706',
+          backgroundColor:'rgba(217,119,6,0.1)', tension:0.4, fill:false,
+          pointRadius:4, borderWidth:2, yAxisID:'y'},
+      ]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{labels:{font:{size:11}}}},
+      scales:{
+        y:{ticks:{callback:v=>'$'+v.toLocaleString(),font:{size:11}}},
+        x:{ticks:{font:{size:10}}}
+      }
+    }
+  });
+}
+
+// ── Expense donut ──────────────────────────────────────
+const ACCT_COLORS = {
+  'Fuel':'#d97706','Maintenance':'#2563eb','Insurance':'#dc2626',
+  'Permits & Licenses':'#7c3aed','Tolls':'#16a34a','Meals':'#0891b2',
+  'Communications':'#db2777','Office & Admin':'#9ca3af','Other':'#6b7280'
+};
+
+function renderDonutChart(filtered){
+  const ctx = document.getElementById('acctDonutChart');
+  if(acctCharts.donut) acctCharts.donut.destroy();
+
+  const expBycat = {};
+  filtered.filter(t=>t.type==='expense').forEach(t=>{
+    expBycat[t.cat]=(expBycat[t.cat]||0)+t.amt;
+  });
+  const sorted = Object.entries(expBycat).sort((a,b)=>b[1]-a[1]);
+  const total = sorted.reduce((s,[,v])=>s+v,0);
+
+  acctCharts.donut = new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:sorted.map(([k])=>k),
+      datasets:[{
+        data:sorted.map(([,v])=>v),
+        backgroundColor:sorted.map(([k])=>ACCT_COLORS[k]||'#888'),
+        borderWidth:0,hoverOffset:6
+      }]
+    },
+    options:{cutout:'68%',plugins:{legend:{display:false}}}
+  });
+
+  document.getElementById('acct-donut-legend').innerHTML = sorted.map(([k,v])=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:12px">
+      <div style="width:10px;height:10px;border-radius:3px;background:${ACCT_COLORS[k]||'#888'};flex-shrink:0"></div>
+      <span style="flex:1;color:var(--ink2)">${k}</span>
+      <span style="font-weight:700">$${v.toLocaleString()}</span>
+      <span style="color:var(--ink3);width:36px;text-align:right">${(v/total*100).toFixed(0)}%</span>
+    </div>`).join('');
+}
+
+// ── Tax summary ────────────────────────────────────────
+function renderTaxSummary(income, expense, net){
+  // IRS Schedule C estimates for self-employed trucker
+  const selfEmpTax = Math.max(0, net * 0.1413);  // 14.13% SE tax
+  const incomeTax  = Math.max(0, net * 0.22);     // rough 22% bracket estimate
+  const qtrPayment = (selfEmpTax + incomeTax) / 4;
+  const standardDed = 14600; // 2026 standard deduction single
+  const taxableNet = Math.max(0, net - standardDed);
+  const effectiveRate = net>0 ? ((selfEmpTax+incomeTax)/net*100).toFixed(1) : '0.0';
+
+  document.getElementById('acct-tax-summary').innerHTML = `
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Gross Income</span><span class="acct-tax-val" style="color:var(--green)">$${income.toLocaleString()}</span></div>
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Total Deductions</span><span class="acct-tax-val" style="color:var(--red)">–$${expense.toLocaleString()}</span></div>
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Net Self-Employ. Income</span><span class="acct-tax-val">$${net.toLocaleString()}</span></div>
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Standard Deduction</span><span class="acct-tax-val" style="color:var(--red)">–$${standardDed.toLocaleString()}</span></div>
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Est. Taxable Income</span><span class="acct-tax-val">$${Math.max(0,taxableNet).toLocaleString()}</span></div>
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Self-Employment Tax (14.1%)</span><span class="acct-tax-val" style="color:var(--amber-d)">$${Math.round(selfEmpTax).toLocaleString()}</span></div>
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Est. Income Tax (22%)</span><span class="acct-tax-val" style="color:var(--amber-d)">$${Math.round(incomeTax).toLocaleString()}</span></div>
+    <div class="acct-tax-row" style="border-top:2px solid var(--border2);margin-top:4px;padding-top:10px">
+      <span class="acct-tax-lbl" style="font-weight:700">Quarterly Est. Payment</span>
+      <span class="acct-tax-val" style="color:var(--red);font-size:16px">$${Math.round(qtrPayment).toLocaleString()}</span>
+    </div>
+    <div class="acct-tax-row"><span class="acct-tax-lbl">Effective Tax Rate</span><span class="acct-tax-val">${effectiveRate}%</span></div>`;
+}
+
+// ── IFTA ───────────────────────────────────────────────
+function renderIFTA(){
+  const totalMiles = iftaData.reduce((s,r)=>s+r.miles,0);
+  const totalGal   = iftaData.reduce((s,r)=>s+r.gal,0);
+  const avgMpg     = (totalMiles/totalGal).toFixed(2);
+
+  document.getElementById('acct-ifta').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.75rem">
+      <div style="background:var(--surface2);padding:8px 10px;border-radius:8px">
+        <div style="font-size:11px;color:var(--ink3)">Total Miles</div>
+        <div style="font-size:17px;font-weight:800">${totalMiles.toLocaleString()}</div>
+      </div>
+      <div style="background:var(--surface2);padding:8px 10px;border-radius:8px">
+        <div style="font-size:11px;color:var(--ink3)">Total Gallons</div>
+        <div style="font-size:17px;font-weight:800">${totalGal.toLocaleString()}</div>
+      </div>
+      <div style="background:var(--surface2);padding:8px 10px;border-radius:8px">
+        <div style="font-size:11px;color:var(--ink3)">Fleet MPG</div>
+        <div style="font-size:17px;font-weight:800;color:var(--amber)">${avgMpg}</div>
+      </div>
+      <div style="background:var(--surface2);padding:8px 10px;border-radius:8px">
+        <div style="font-size:11px;color:var(--ink3)">States Filed</div>
+        <div style="font-size:17px;font-weight:800">${iftaData.length}</div>
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>State</th><th>Miles</th><th>Gal Used</th><th>Tax Rate</th><th style="text-align:right">Tax Due</th></tr></thead>
+        <tbody>
+          ${iftaData.map(r=>{
+            const taxDue = (r.miles/totalMiles*totalGal*r.rate).toFixed(2);
+            return `<tr>
+              <td style="font-weight:700">${r.state}</td>
+              <td>${r.miles.toLocaleString()}</td>
+              <td>${r.gal}</td>
+              <td>$${r.rate.toFixed(3)}</td>
+              <td style="text-align:right;font-weight:700;color:var(--amber-d)">$${taxDue}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// ── Transaction ledger ─────────────────────────────────
+function filterTransactions(search){
+  const cat = document.getElementById('acct-cat-filter')?.value || '';
+  const q = search.toLowerCase();
+  const periodTxns = acctFilterByPeriod(acctTransactions);
+  acctFilteredTxns = periodTxns.filter(t=>{
+    const matchQ = !q || t.desc.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q);
+    const matchCat = !cat || t.cat===cat;
+    return matchQ && matchCat;
+  }).sort((a,b)=>b.date.localeCompare(a.date));
+  renderTransactions();
+}
+
+function renderTransactions(){
+  const slice = acctFilteredTxns.slice(0, acctVisibleCount);
+  const tbody = document.getElementById('acct-txn-tbody');
+  if(!tbody) return;
+
+  if(!slice.length){
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state" style="padding:2rem">
+      <div class="empty-state-icon">🔍</div>
+      <div class="empty-state-title">No transactions found</div>
+      <div class="empty-state-sub">Try adjusting your search or filter, or import a CSV from your accounting software.</div>
+    </div></td></tr>`;
+  } else {
+    tbody.innerHTML = slice.map(t=>`
+      <tr>
+        <td style="white-space:nowrap">${formatDate(t.date)}</td>
+        <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${t.desc}">${t.desc}</td>
+        <td><span class="badge ${catBadgeClass(t.cat)}">${t.cat}</span></td>
+        <td><span class="badge ${t.type==='income'?'bg':'br'}">${t.type==='income'?'Income':'Expense'}</span></td>
+        <td style="text-align:right" class="${t.type==='income'?'txn-income':'txn-expense'}">
+          ${t.type==='income'?'+':'–'}$${t.amt.toLocaleString()}
+        </td>
+      </tr>`).join('');
+  }
+
+  const countEl = document.getElementById('acct-txn-count');
+  if(countEl) countEl.textContent = `Showing ${Math.min(slice.length,acctFilteredTxns.length)} of ${acctFilteredTxns.length} transactions`;
+  const moreBtn = document.getElementById('acct-load-more');
+  if(moreBtn) moreBtn.style.display = acctFilteredTxns.length > acctVisibleCount ? 'block':'none';
+}
+
+function acctShowMore(){
+  acctVisibleCount += 15;
+  renderTransactions();
+}
+
+function catBadgeClass(cat){
+  const map={'Income':'bg','Fuel':'ba','Maintenance':'bb','Insurance':'br','Permits & Licenses':'bp2','Tolls':'bg'};
+  return map[cat]||'ba';
+}
+
+function formatDate(d){
+  const [y,m,day]=d.split('-');
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m)-1]} ${parseInt(day)}, ${y}`;
+}
+
+// ── Add transaction ────────────────────────────────────
+function addTransaction(){
+  const date = document.getElementById('txn-date').value;
+  const desc = document.getElementById('txn-desc').value.trim();
+  const cat  = document.getElementById('txn-cat').value;
+  const amt  = parseFloat(document.getElementById('txn-amt').value);
+  const type = document.querySelector('input[name="txn-type"]:checked')?.value || 'expense';
+
+  if(!date||!desc||!amt){
+    showToast('Missing fields','Please fill in date, description and amount.','warning'); return;
+  }
+  acctTransactions.unshift({date,desc,cat,type,amt});
+  showToast('Transaction added',`${type==='income'?'+':'-'}$${amt.toFixed(2)} · ${cat}`,'success');
+  document.getElementById('txn-desc').value='';
+  document.getElementById('txn-amt').value='';
+  initAccounting();
+}
+
+// ── CSV Import ─────────────────────────────────────────
+function handleCSVImport(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const text = e.target.result;
+    const result = parseCSV(text, file.name);
+    if(result.count === 0){
+      showToast('Import failed','No valid transactions found in this file. Check the format guide below.','error',5000); return;
+    }
+    acctTransactions = [...result.txns, ...acctTransactions];
+    const banner = document.getElementById('acct-import-banner');
+    const msg = document.getElementById('acct-import-msg');
+    if(banner&&msg){
+      msg.textContent = `✓ Imported ${result.count} transactions from ${result.source} · ${result.income} income · ${result.expenses} expenses`;
+      banner.style.display='flex';
+      setTimeout(()=>banner.style.display='none',6000);
+    }
+    document.getElementById('acct-source-name').textContent = result.source;
+    document.getElementById('acct-source-date').textContent = `· Imported ${new Date().toLocaleDateString()}`;
+    showToast('CSV imported!',`${result.count} transactions from ${result.source}`,'success',4000);
+    initAccounting();
+  };
+  reader.readAsText(file);
+  input.value=''; // allow re-importing same file
+}
+
+function parseCSV(text, filename){
+  const lines = text.trim().split('\n').filter(Boolean);
+  if(lines.length < 2) return {count:0,txns:[],source:'Unknown',income:0,expenses:0};
+
+  const header = lines[0].toLowerCase().replace(/"/g,'');
+  const cols = header.split(',').map(c=>c.trim());
+
+  // Auto-detect format
+  let source = 'CSV File';
+  if(filename.toLowerCase().includes('quickbooks')||header.includes('transaction type')) source='QuickBooks';
+  else if(header.includes('wave')) source='Wave';
+  else if(header.includes('xero')) source='Xero';
+  else if(header.includes('freshbooks')) source='FreshBooks';
+  else if(header.includes('rigbooks')) source='Rigbooks';
+
+  // Column index helpers
+  const ci = name => cols.findIndex(c=>c.includes(name));
+  const dateIdx   = ci('date');
+  const descIdx   = ci('desc')||ci('memo')||ci('name')||ci('payee');
+  const amtIdx    = ci('amount')||ci('total');
+  const typeIdx   = ci('type');
+  const catIdx    = ci('categ')||ci('account');
+  const creditIdx = ci('credit')||ci('income');
+  const debitIdx  = ci('debit')||ci('expense');
+
+  const txns = [];
+  lines.slice(1).forEach(line=>{
+    try {
+      // Handle quoted CSV fields
+      const parts = line.match(/(".*?"|[^,]+)(?=,|$)/g)||line.split(',');
+      const clean = v => (parts[v]||'').replace(/^"|"$/g,'').trim();
+
+      const rawDate = clean(dateIdx>=0?dateIdx:0);
+      const desc    = clean(descIdx>=0?descIdx:1) || 'Imported transaction';
+      let   amt     = 0;
+      let   type    = 'expense';
+
+      // Try to determine amount and type
+      if(creditIdx>=0&&debitIdx>=0){
+        const credit = parseFloat(clean(creditIdx).replace(/[^0-9.-]/g,''))||0;
+        const debit  = parseFloat(clean(debitIdx).replace(/[^0-9.-]/g,''))||0;
+        if(credit>0){amt=credit;type='income';}
+        else if(debit>0){amt=debit;type='expense';}
+      } else {
+        const raw = parseFloat((clean(amtIdx>=0?amtIdx:2)).replace(/[^0-9.-]/g,''))||0;
+        amt = Math.abs(raw);
+        if(raw>0) type='income'; else type='expense';
+        // Check type column
+        if(typeIdx>=0){
+          const t=clean(typeIdx).toLowerCase();
+          if(t.includes('income')||t.includes('credit')||t.includes('payment received')) type='income';
+          else type='expense';
+        }
+      }
+
+      // Parse date — try multiple formats
+      let parsedDate = rawDate;
+      const d = new Date(rawDate);
+      if(!isNaN(d)) parsedDate = d.toISOString().split('T')[0];
+
+      // Map category
+      let cat = catIdx>=0 ? clean(catIdx) : (type==='income'?'Income':'Other');
+      cat = mapCategory(cat);
+
+      if(amt>0 && parsedDate){
+        txns.push({date:parsedDate, desc, cat, type, amt});
+      }
+    } catch(err){}
+  });
+
+  const income   = txns.filter(t=>t.type==='income').length;
+  const expenses = txns.filter(t=>t.type==='expense').length;
+  return {count:txns.length, txns, source, income, expenses};
+}
+
+function mapCategory(raw){
+  const r = raw.toLowerCase();
+  if(r.includes('fuel')||r.includes('diesel')||r.includes('gas')) return 'Fuel';
+  if(r.includes('repair')||r.includes('maint')||r.includes('tire')||r.includes('oil')) return 'Maintenance';
+  if(r.includes('insur')) return 'Insurance';
+  if(r.includes('permit')||r.includes('license')||r.includes('ifta')||r.includes('registr')) return 'Permits & Licenses';
+  if(r.includes('toll')||r.includes('turnpike')) return 'Tolls';
+  if(r.includes('meal')||r.includes('food')||r.includes('restaurant')||r.includes('dining')) return 'Meals';
+  if(r.includes('phone')||r.includes('mobile')||r.includes('verizon')||r.includes('att')) return 'Communications';
+  if(r.includes('office')||r.includes('subscript')||r.includes('software')||r.includes('admin')) return 'Office & Admin';
+  if(r.includes('income')||r.includes('freight')||r.includes('haul')||r.includes('load')||r.includes('payment received')) return 'Income';
+  return 'Other';
+}
+
+// ── CSV Export ─────────────────────────────────────────
+function exportAccountingCSV(){
+  const rows = [['Date','Description','Category','Type','Amount']];
+  acctFilterByPeriod(acctTransactions).forEach(t=>{
+    rows.push([t.date, `"${t.desc}"`, t.cat, t.type, t.type==='income'?t.amt:-t.amt]);
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  downloadFile(csv, `rigcommand-accounting-${acctPeriodActive}.csv`, 'text/csv');
+  showToast('Export ready','Accounting CSV downloaded','success');
+}
+
+function exportIFTA(){
+  const rows = [['State','Miles','Gallons Used','Tax Rate','Tax Due']];
+  const totalMiles = iftaData.reduce((s,r)=>s+r.miles,0);
+  const totalGal   = iftaData.reduce((s,r)=>s+r.gal,0);
+  iftaData.forEach(r=>{
+    const due = (r.miles/totalMiles*totalGal*r.rate).toFixed(2);
+    rows.push([r.state, r.miles, r.gal, r.rate.toFixed(3), due]);
+  });
+  const csv = rows.map(r=>r.join(',')).join('\n');
+  downloadFile(csv, 'rigcommand-ifta-q2-2026.csv', 'text/csv');
+  showToast('IFTA report downloaded','Ready to file with your state','success');
+}
+
+function downloadFile(content, filename, mime){
+  const blob = new Blob([content], {type:mime});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href=url; a.download=filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+
+// ── Import guides per software ─────────────────────────
+const IMPORT_GUIDES = {
+  quickbooks:`<strong>QuickBooks Online:</strong><br>
+1. Go to <em>Reports → Profit & Loss</em> or <em>Transactions</em><br>
+2. Set your date range and click <em>Customize</em><br>
+3. Click <em>Export to Excel</em>, then save as CSV<br>
+4. Click <strong>⬆ Import CSV</strong> above and select the file<br><br>
+<strong>QuickBooks Desktop:</strong><br>
+1. Go to <em>Reports → Accountant & Taxes → Transaction Detail by Account</em><br>
+2. Set date range → <em>Export → Export to Excel</em> → Save as CSV`,
+
+  wave:`<strong>Wave Accounting:</strong><br>
+1. Go to <em>Accounting → Transactions</em><br>
+2. Set date range and click <em>Export Transactions (CSV)</em><br>
+3. Click <strong>⬆ Import CSV</strong> above and select the downloaded file`,
+
+  xero:`<strong>Xero:</strong><br>
+1. Go to <em>Accounting → Bank Accounts → your account</em><br>
+2. Click <em>Export</em> and choose CSV<br>
+3. Or go to <em>Reports → Account Transactions</em> → Export<br>
+4. Click <strong>⬆ Import CSV</strong> above`,
+
+  freshbooks:`<strong>FreshBooks:</strong><br>
+1. Go to <em>Expenses → All Expenses</em><br>
+2. Click the <em>Export</em> icon (top right) → Export as CSV<br>
+3. For income: <em>Invoices → All Invoices</em> → Export<br>
+4. Click <strong>⬆ Import CSV</strong> above`,
+
+  rigbooks:`<strong>Rigbooks:</strong><br>
+1. Log in at rigbooks.com<br>
+2. Go to <em>Reports → Export</em><br>
+3. Select your date range and export as CSV<br>
+4. Click <strong>⬆ Import CSV</strong> above`,
+
+  spreadsheet:`<strong>Excel / Google Sheets:</strong><br>
+Format your spreadsheet with these columns in order:<br>
+<code>Date, Description, Category, Type, Amount</code><br><br>
+• Date format: MM/DD/YYYY or YYYY-MM-DD<br>
+• Type: "income" or "expense"<br>
+• Category: Fuel, Maintenance, Insurance, Tolls, Meals, etc.<br>
+• Amount: positive number (no $ sign)<br><br>
+Save as .csv and click <strong>⬆ Import CSV</strong> above`
+};
+
+function showImportGuide(source){
+  const el = document.getElementById('import-guide');
+  if(!el) return;
+  if(el.dataset.open===source && el.style.display!=='none'){
+    el.style.display='none'; el.dataset.open=''; return;
+  }
+  el.innerHTML = IMPORT_GUIDES[source]||'';
+  el.style.display='block';
+  el.dataset.open=source;
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
